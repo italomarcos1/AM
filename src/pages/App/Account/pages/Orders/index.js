@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { ActivityIndicator } from 'react-native';
-import { useSelector } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator } from "react-native";
+import { useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 
 import {
   Container,
   NoPurchases,
   NoPurchasesContainer,
   TransactionsList,
-} from './styles';
+} from "./styles";
 
-import api from '~/services/api';
+import api from "~/services/api";
 
-import OrderInfo from './components/OrderInfo';
+import OrderInfo from "./components/OrderInfo";
 
 export default function Transactions() {
   const [transactions, setTransactions] = useState([]);
@@ -21,12 +21,12 @@ export default function Transactions() {
 
   const navigation = useNavigation();
 
-  const order = useSelector(state => state.user.order);
-  const triggered = useSelector(state => state.user.triggered);
+  const order = useSelector((state) => state.user.order);
+  const triggered = useSelector((state) => state.user.triggered);
 
   useEffect(() => {
     if (triggered) {
-      navigation.navigate('Details', {
+      navigation.navigate("Details", {
         id: order.id,
         created: order.created,
       });
@@ -38,12 +38,17 @@ export default function Transactions() {
       try {
         setLoading(true);
 
-        const { data } = await api.get('clients/transactions');
+        const {
+          data: {
+            meta: { message },
+            data,
+          },
+        } = await api.get("clients/transactions");
 
-        if (data.meta.message === 'Não há compras recentes.') {
+        if (message === "Não há compras recentes.") {
           setNoTransactions(true);
         } else {
-          setTransactions(data.data);
+          setTransactions(data);
         }
         setLoading(false);
       } catch (err) {
@@ -64,7 +69,7 @@ export default function Transactions() {
         {!loading && !noTransactions && (
           <TransactionsList
             data={transactions}
-            keyExtractor={transaction => String(transaction.id)}
+            keyExtractor={(transaction) => String(transaction.id)}
             renderItem={({ item: transaction }) => (
               <OrderInfo transaction={transaction} />
             )}

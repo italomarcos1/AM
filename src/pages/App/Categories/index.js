@@ -1,14 +1,16 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { FlatList } from 'react-native';
-import { useDispatch } from 'react-redux';
+import React, { useCallback, useEffect, useState } from "react";
+import { FlatList } from "react-native";
+import { useDispatch } from "react-redux";
 
-import api from '~/services/api';
-import { showTabBar } from '~/store/modules/user/actions';
+import api from "~/services/api";
+import { showTabBar } from "~/store/modules/user/actions";
 
-import CategoryItem from '~/components/CategoryItem';
-import Loader from '~/components/Loader';
+import CategoryItem from "~/components/CategoryItem";
+import Loader from "~/components/Loader";
 
-import { Container } from './styles';
+import { Container } from "./styles";
+
+//champ
 
 export default function Categories() {
   const dispatch = useDispatch();
@@ -23,14 +25,16 @@ export default function Categories() {
     setLoading(true);
 
     const {
-      data: { data },
+      data: {
+        data: { data, last_page },
+      },
     } = await api.get(
       `ecommerce/categories/?page=${page}&recursively=1&per_page=13&order_field=slug&order_direction=asc`
     );
 
-    setCategories([...categories, ...data.data]);
+    setCategories([...categories, ...data]);
     setPage(page + 1);
-    setLastPage(data.last_page);
+    setLastPage(last_page);
     setLoading(false);
   }, [page, lastPage, categories]);
 
@@ -50,8 +54,8 @@ export default function Categories() {
           showsVerticalScrollIndicator={false}
           data={categories}
           numColumns={2}
-          style={{ flex: 1, width: '100%' }}
-          keyExtractor={item => String(item.id)}
+          style={{ flex: 1, width: "100%" }}
+          keyExtractor={(item) => String(item.id)}
           renderItem={({ item }) => <CategoryItem item={item} />}
           onEndReached={() => loadCategories()}
           onEndReachedThreshold={0.3}

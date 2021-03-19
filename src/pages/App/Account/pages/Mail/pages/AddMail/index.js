@@ -1,25 +1,27 @@
-import React, { useCallback, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
-import PropTypes from 'prop-types';
-import Toast from 'react-native-tiny-toast';
-import api from '~/services/api';
+import React, { useCallback, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
+import PropTypes from "prop-types";
+import Toast from "react-native-tiny-toast";
+import api from "~/services/api";
 
-import Validation from '~/components/Validation';
-import InputMenu from '~/components/InputMenu';
-import ButtonMenu from '~/components/ButtonMenu';
-import Header from '~/components/HeaderMenu';
+import Validation from "~/components/Validation";
+import InputMenu from "~/components/InputMenu";
+import ButtonMenu from "~/components/ButtonMenu";
+import Header from "~/components/HeaderMenu";
 
-import { Container, InputContainer, InputName } from './styles';
+import { Container, InputContainer, InputName } from "./styles";
 
-import { updateProfileSuccess } from '~/store/modules/user/actions';
+import { updateProfileSuccess } from "~/store/modules/user/actions";
+
+//champ
 
 export default function AddMail() {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
-  const user = useSelector(state => state.user.profile);
+  const user = useSelector((state) => state.user.profile);
 
   const navigation = useNavigation();
 
@@ -27,18 +29,18 @@ export default function AddMail() {
     try {
       setLoading(true);
 
-      await api.put('clients', { email });
+      await api.put("clients", { email });
       const updatedUser = { ...user, email };
 
-      Toast.showSuccess('Email cadastrado com sucesso.');
+      Toast.showSuccess("Email cadastrado com sucesso.");
       setLoading(false);
 
       dispatch(updateProfileSuccess(updatedUser));
-      navigation.navigate('Account');
+      navigation.navigate("Account");
     } catch (err) {
       setLoading(false);
 
-      Toast.show('Erro ao cadastrar email.');
+      Toast.show("Erro ao cadastrar email.");
     }
   }, [email, dispatch, navigation]);
 
@@ -55,9 +57,9 @@ export default function AddMail() {
             autoCapitalize="none"
             autoCorrect={false}
             maxLength={45}
-            clear={() => setEmail('')}
+            clear={() => setEmail("")}
             value={email}
-            onChangeText={value => setEmail(value)}
+            onChangeText={(value) => setEmail(value)}
             returnKeyType="send"
             onSubmitEditing={handleAddMail}
           />

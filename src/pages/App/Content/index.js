@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Dimensions, Animated } from 'react-native';
-import { useDispatch } from 'react-redux';
-import HTML from 'react-native-render-html';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState } from "react";
+import { Dimensions, Animated } from "react-native";
+import { useDispatch } from "react-redux";
+import HTML from "react-native-render-html";
+import PropTypes from "prop-types";
 
-import api from '~/services/api';
+import api from "~/services/api";
 
-import { showTabBar, resetTrigger } from '~/store/modules/user/actions';
+import { showTabBar, resetTrigger } from "~/store/modules/user/actions";
 
-import PlaceholderImage from '~/assets/placeholder.svg';
+import PlaceholderImage from "~/assets/placeholder.svg";
 
 import {
   Container,
@@ -16,13 +16,13 @@ import {
   Title,
   ImageContainer,
   Thumb,
-} from './styles';
+} from "./styles";
 
 export default function ContentScreen({ route }) {
   const [htmlContent, setHtmlContent] = useState(
     '<div style="align-items:center"><h3 style="color: #999">Carregando...</h1></div>'
   );
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState("");
   const [thumb, setThumb] = useState(null);
   const [banner, setBanner] = useState(null);
   const [bannerOpacity] = useState(new Animated.Value(0));
@@ -59,7 +59,7 @@ export default function ContentScreen({ route }) {
       {banner !== null ? (
         <ImageContainer>
           <Thumb
-            width={Dimensions.get('window').width}
+            width={Dimensions.get("window").width}
             source={{
               uri: `${thumb}`,
             }}
@@ -74,10 +74,10 @@ export default function ContentScreen({ route }) {
               uri: `${banner}`,
             }}
             style={{
-              position: 'absolute',
+              position: "absolute",
               opacity: bannerOpacity,
-              width: Dimensions.get('window').width,
-              height: Dimensions.get('window').width,
+              width: Dimensions.get("window").width,
+              height: Dimensions.get("window").width,
             }}
           />
         </ImageContainer>
@@ -89,10 +89,10 @@ export default function ContentScreen({ route }) {
         <Title>{title}</Title>
         <HTML
           html={htmlContent}
-          staticContentMaxWidth={Dimensions.get('window').width - 30}
+          staticContentMaxWidth={Dimensions.get("window").width - 30}
           imagesInitialDimensions={{
-            width: Dimensions.get('window').width - 30,
-            height: Math.round((Dimensions.get('window').width * 9) / 16),
+            width: Dimensions.get("window").width - 30,
+            height: Math.round((Dimensions.get("window").width * 9) / 16),
           }}
           tagsStyles={{
             img: {
@@ -108,19 +108,19 @@ export default function ContentScreen({ route }) {
               fontSize: 17,
               marginBottom: 15,
               lineHeight: 30,
-              fontWeight: 'bold',
+              fontWeight: "bold",
             },
             li: {
               fontSize: 17,
-              fontWeight: 'bold',
+              fontWeight: "bold",
             },
             h1: {
               fontSize: 20,
-              fontWeight: 'bold',
+              fontWeight: "bold",
             },
             iframe: {
-              width: Dimensions.get('window').width - 30,
-              height: Math.round((Dimensions.get('window').width * 9) / 16),
+              width: Dimensions.get("window").width - 30,
+              height: Math.round((Dimensions.get("window").width * 9) / 16),
             },
           }}
         />

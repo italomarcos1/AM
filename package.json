@@ -1,5 +1,5 @@
 {
-  "name": "AMFrutas",
+  "name": "AM",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -26,6 +26,7 @@
     "react-content-loader": "^5.1.4",
     "react-loading-skeleton": "^2.1.1",
     "react-native": "0.63.4",
+    "react-native-appstore-version-checker": "^3.0.0",
     "react-native-easy-content-loader": "^0.3.2",
     "react-native-fbsdk": "^1.1.2",
     "react-native-gesture-handler": "^1.9.0",

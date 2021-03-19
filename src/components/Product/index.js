@@ -1,13 +1,13 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import CustomIcon from 'react-native-vector-icons/Feather';
-import Toast from 'react-native-tiny-toast';
-import {Text, View, ScrollView, Linking, Modal, Platform} from 'react-native';
-import HTML from 'react-native-render-html';
-import {isIphoneX} from 'react-native-iphone-x-helper';
+import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Icon from "react-native-vector-icons/MaterialIcons";
+import CustomIcon from "react-native-vector-icons/Feather";
+import Toast from "react-native-tiny-toast";
+import { Text, View, ScrollView, Linking, Modal, Platform } from "react-native";
+import HTML from "react-native-render-html";
+import { isIphoneX } from "react-native-iphone-x-helper";
 
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import {
   AmountButton,
   AmountButtonContainer,
@@ -44,23 +44,25 @@ import {
   DescriptionHeaderText,
   CloseDescription,
   OffArea,
-} from './styles';
+} from "./styles";
 
-import WhatsAppIcon from '~/assets/ico-menu-whatsapp.svg';
-import Shield from '~/assets/ico-shield.svg';
+import WhatsAppIcon from "~/assets/ico-menu-whatsapp.svg";
+import Shield from "~/assets/ico-shield.svg";
 
 import {
   addToCartRequest,
   addToFavoritesRequest,
   removeFromFavoritesRequest,
-} from '~/store/modules/cart/actions';
+} from "~/store/modules/cart/actions";
 
-import api from '~/services/api';
+import api from "~/services/api";
 
 Icon.loadFont();
 CustomIcon.loadFont();
 
-export default function Product({route, navigation}) {
+//champ
+
+export default function Product({ route, navigation }) {
   const product = route.params.item;
 
   const signed = useSelector((state) => state.auth.signed);
@@ -70,11 +72,11 @@ export default function Product({route, navigation}) {
 
   const [favorite, setFavorite] = useState(false);
 
-  const [shippingCost, setShippingCost] = useState('');
-  const [freeShippingMessage, setFreeShippingMessage] = useState('');
-  const [shippingDeadline, setShippingDeadline] = useState('');
-  const [minValueShipping, setMinValueShipping] = useState('');
-  const [productDescription, setProductDescription] = useState('');
+  const [shippingCost, setShippingCost] = useState("");
+  const [freeShippingMessage, setFreeShippingMessage] = useState("");
+  const [shippingDeadline, setShippingDeadline] = useState("");
+  const [minValueShipping, setMinValueShipping] = useState("");
+  const [productDescription, setProductDescription] = useState("");
 
   const [whatsappNumber, setWhatsappNumber] = useState([]);
 
@@ -84,7 +86,7 @@ export default function Product({route, navigation}) {
     async function loadProductImages() {
       const [prod, menuData] = await Promise.all([
         api.get(`ecommerce/products/${product.id}`),
-        api.get('menu'),
+        api.get("configurations?keys=whatsapp"),
       ]);
 
       const {
@@ -95,6 +97,8 @@ export default function Product({route, navigation}) {
         description,
       } = prod.data.data;
 
+      const { whatsapp } = menuData.data;
+
       setShippingCost(shipping_cost);
       setFreeShippingMessage(free_shipping_message);
       setShippingDeadline(shipping_deadline);
@@ -102,7 +106,7 @@ export default function Product({route, navigation}) {
 
       setProductDescription(description);
 
-      setWhatsappNumber(menuData.data.data.whatsapp);
+      setWhatsappNumber(whatsapp);
     }
     loadProductImages();
   }, []);
@@ -131,7 +135,7 @@ export default function Product({route, navigation}) {
   }, [dispatch, product, amount]);
 
   const handlePromotionalPercentage = useCallback(() => {
-    const {price, price_promotional} = product;
+    const { price, price_promotional } = product;
     const promotional = Math.ceil(((price - price_promotional) / price) * 100);
 
     return promotional;
@@ -144,12 +148,12 @@ export default function Product({route, navigation}) {
 
   const handleFavorite = () => {
     if (!signed) {
-      navigation.navigate('Account');
+      navigation.navigate("Account");
     } else {
       dispatch(
         !favorite
           ? addToFavoritesRequest(product.id)
-          : removeFromFavoritesRequest(product.id),
+          : removeFromFavoritesRequest(product.id)
       );
       setFavorite(!favorite);
     }
@@ -157,18 +161,19 @@ export default function Product({route, navigation}) {
 
   return (
     <>
-      <View style={{flex: 1, backgroundColor: '#fff'}}>
-        <ScrollView contentContainerStyle={{height: 700}}>
-          <View style={{flex: 1, position: 'relative'}}>
+      <View style={{ flex: 1, backgroundColor: "#fff" }}>
+        <ScrollView contentContainerStyle={{ height: 700 }}>
+          <View style={{ flex: 1, position: "relative" }}>
             <BackButton
               onPress={() => {
                 navigation.goBack();
               }}
-              isIphoneX={Platform.OS !== 'android' && isIphoneX}>
+              isIphoneX={Platform.OS !== "android" && isIphoneX}
+            >
               <Icon name="chevron-left" size={30} color="#fff" />
             </BackButton>
 
-            <ProductImage source={{uri: product.banner}} resizeMode="cover" />
+            <ProductImage source={{ uri: product.banner }} resizeMode="cover" />
 
             <ProductInfo>
               <ProductPrice>
@@ -205,14 +210,14 @@ export default function Product({route, navigation}) {
               </ProductPrice>
 
               <ProductNameContainer>
-                <Text style={{fontSize: 20, marginVertical: 10}}>
+                <Text style={{ fontSize: 20, marginVertical: 10 }}>
                   {product.title}
                 </Text>
               </ProductNameContainer>
 
               <DescriptionButtonContainer>
                 <SeeDescription onPress={() => setDescriptionOpen(true)}>
-                  <Text style={{fontSize: 12, fontWeight: 'bold'}}>
+                  <Text style={{ fontSize: 12, fontWeight: "bold" }}>
                     Ver Descrição
                   </Text>
                 </SeeDescription>
@@ -220,7 +225,8 @@ export default function Product({route, navigation}) {
                 <AmountButtonContainer>
                   <AmountButton
                     disabled={amount === 0}
-                    onPress={() => setAmount(amount - 1)}>
+                    onPress={() => setAmount(amount - 1)}
+                  >
                     <Icon name="remove" size={25} color="black" />
                   </AmountButton>
 
@@ -234,7 +240,7 @@ export default function Product({route, navigation}) {
             </ProductInfo>
 
             <MinimalPrice>
-              <Text style={{color: '#fff'}}>{minValueShipping}</Text>
+              <Text style={{ color: "#fff" }}>{minValueShipping}</Text>
             </MinimalPrice>
 
             <CreditContainer>
@@ -242,34 +248,34 @@ export default function Product({route, navigation}) {
                 <Shipping>Porte:</Shipping>
 
                 <ShippingPrice>
-                  {shippingCost > 0 ? `€ ${shippingCost}` : 'Grátis'}
+                  {shippingCost > 0 ? `€ ${shippingCost}` : "Grátis"}
                 </ShippingPrice>
               </ShippingContainer>
 
-              <Text style={{fontSize: 14, color: '#F48312'}}>
+              <Text style={{ fontSize: 14, color: "#F48312" }}>
                 {freeShippingMessage}
               </Text>
 
               {product.cback !== undefined && product.cback > 0.0 && (
-                <Text style={{fontSize: 15, color: '#259d41'}}>
+                <Text style={{ fontSize: 15, color: "#259d41" }}>
                   Receba {`€ ${product.cback}`} de volta para a próxima compra
                 </Text>
               )}
 
               <ShippingContainer>
-                <Text style={{color: '#9A9A9A', fontSize: 14}}>Para</Text>
+                <Text style={{ color: "#9A9A9A", fontSize: 14 }}>Para</Text>
 
                 <ShippingDestination>Lisboa</ShippingDestination>
 
-                <Text style={{color: '#9A9A9A', fontSize: 14}}>
+                <Text style={{ color: "#9A9A9A", fontSize: 14 }}>
                   via AM Frutas
                 </Text>
               </ShippingContainer>
 
               <ShippingContainer>
-                <Text style={{fontSize: 15}}>Tempo de entrega:</Text>
+                <Text style={{ fontSize: 15 }}>Tempo de entrega:</Text>
 
-                <Text style={{fontSize: 15, color: '#259D41', marginLeft: 3}}>
+                <Text style={{ fontSize: 15, color: "#259D41", marginLeft: 3 }}>
                   {shippingDeadline}
                 </Text>
               </ShippingContainer>
@@ -279,7 +285,7 @@ export default function Product({route, navigation}) {
               <ShieldContainer>
                 <Shield />
 
-                <Text style={{marginLeft: 10}}>
+                <Text style={{ marginLeft: 10 }}>
                   Garantia de produtos frescos
                 </Text>
               </ShieldContainer>
@@ -289,9 +295,9 @@ export default function Product({route, navigation}) {
 
         <AddToCartContainer>
           <WhatsAppButton onPress={sendWhatsappMessage}>
-            <WhatsAppIcon height={25} width={25} style={{marginBottom: 5}} />
+            <WhatsAppIcon height={25} width={25} style={{ marginBottom: 5 }} />
 
-            <Text style={{textAlign: 'center', fontSize: 12}}>
+            <Text style={{ textAlign: "center", fontSize: 12 }}>
               Contato Via WhatsApp
             </Text>
           </WhatsAppButton>
@@ -300,9 +306,10 @@ export default function Product({route, navigation}) {
             disabled={amount === 0}
             onPress={() => {
               handleAddToCart();
-              Toast.showSuccess('Produto adicionado ao cesto');
-            }}>
-            <Text style={{color: '#fff', fontSize: 18, fontWeight: 'bold'}}>
+              Toast.showSuccess("Produto adicionado ao cesto");
+            }}
+          >
+            <Text style={{ color: "#fff", fontSize: 18, fontWeight: "bold" }}>
               Adicionar ao Cesto
             </Text>
           </AddToCartButton>
@@ -311,7 +318,8 @@ export default function Product({route, navigation}) {
         <Modal
           visible={openDescription}
           onRequestClose={() => setDescriptionOpen(false)}
-          transparent>
+          transparent
+        >
           <TransparentBackground>
             <OffArea onPress={() => setDescriptionOpen(false)} />
             <DescriptionContainer>
@@ -327,12 +335,13 @@ export default function Product({route, navigation}) {
 
               <ScrollView
                 showsVerticalScrollIndicator={false}
-                style={{paddingHorizontal: 11}}>
+                style={{ paddingHorizontal: 11 }}
+              >
                 <HTML
                   html={productDescription}
                   tagsStyles={{
                     p: {
-                      color: '#212121',
+                      color: "#212121",
                       fontSize: 18,
                       lineHeight: 25,
                       marginVertical: 7,

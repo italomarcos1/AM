@@ -1,18 +1,20 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { FlatList } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useCallback, useEffect, useState } from "react";
+import { FlatList } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 
-import api from '~/services/api';
-import { addFavorites } from '~/store/modules/cart/actions';
+import api from "~/services/api";
+import { addFavorites } from "~/store/modules/cart/actions";
 
-import ProductItem from '~/components/ProductItem';
-import Loader from '~/components/Loader';
+import ProductItem from "~/components/ProductItem";
+import Loader from "~/components/Loader";
 
-import { Container } from './styles';
+import { Container } from "./styles";
+
+//champ
 
 export default function Promotions() {
-  const signed = useSelector(state => state.auth.signed);
-  const favs = useSelector(state => state.cart.favorites);
+  const signed = useSelector((state) => state.auth.signed);
+  const favs = useSelector((state) => state.cart.favorites);
 
   const dispatch = useDispatch();
 
@@ -25,8 +27,8 @@ export default function Promotions() {
   const loadFavorites = useCallback(async () => {
     const {
       data: { data, meta },
-    } = await api.get('clients/wishlists');
-    if (meta.message === 'Produtos favoritos retornados com sucesso') {
+    } = await api.get("clients/wishlists");
+    if (meta.message === "Produtos favoritos retornados com sucesso") {
       setFavorites(data);
       dispatch(addFavorites(data));
     } else {
@@ -39,12 +41,14 @@ export default function Promotions() {
     setLoading(true);
 
     const {
-      data: { data },
+      data: {
+        data: { data, last_page },
+      },
     } = await api.get(`ecommerce/products?page=${page}&only_promotional=1`);
 
-    setPromotions([...promotions, ...data.data]);
+    setPromotions([...promotions, ...data]);
     setPage(page + 1);
-    setLastPage(data.last_page);
+    setLastPage(last_page);
     setLoading(false);
   }, [page, lastPage, promotions]);
 
@@ -67,8 +71,8 @@ export default function Promotions() {
         showsVerticalScrollIndicator={false}
         data={promotions}
         numColumns={2}
-        style={{ flex: 1, width: '100%' }}
-        keyExtractor={item => String(item.id)}
+        style={{ flex: 1, width: "100%" }}
+        keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => <ProductItem item={item} />}
         onEndReached={() => loadPromotions()}
         onEndReachedThreshold={0.3}

@@ -1,12 +1,12 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { StatusBar, ActivityIndicator, TouchableOpacity } from 'react-native';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/Feather';
+import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { StatusBar, ActivityIndicator, TouchableOpacity } from "react-native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import Icon from "react-native-vector-icons/Feather";
 
-import EmptyBagIcon from '~/assets/empty-bag.svg';
+import EmptyBagIcon from "~/assets/empty-bag.svg";
 
-import api from '~/services/api';
+import api from "~/services/api";
 
 import {
   ActivityIndicatorContainer,
@@ -35,15 +35,15 @@ import {
   EmptyBagTitle,
   TotalLabel,
   TotalPrice,
-} from './styles';
+} from "./styles";
 
-import Header from '~/components/HeaderMenu';
+import Header from "~/components/HeaderMenu";
 
 import {
   removeFromCartRequest,
   updateAmount,
-} from '~/store/modules/cart/actions';
-import { showTabBar, resetTrigger } from '~/store/modules/user/actions';
+} from "~/store/modules/cart/actions";
+import { showTabBar, resetTrigger } from "~/store/modules/user/actions";
 
 Icon.loadFont();
 
@@ -51,8 +51,8 @@ export default function ShoppingBag() {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  const products = useSelector(state => state.cart.products);
-  const signed = useSelector(state => state.auth.signed);
+  const products = useSelector((state) => state.cart.products);
+  const signed = useSelector((state) => state.auth.signed);
 
   const [totalBag, setTotalBag] = useState(0);
   const [loadingBag, setLoadingBag] = useState(false);
@@ -75,7 +75,7 @@ export default function ShoppingBag() {
       return (
         totalSum +
         (product.has_promotion ? product.price_promotional : product.price) *
-         product.qty
+          product.qty
       );
     }, 0);
 
@@ -85,7 +85,7 @@ export default function ShoppingBag() {
   }, [products]);
 
   const handleRemoveFromCart = useCallback(
-    async id => {
+    async (id) => {
       setLoadingBag(true);
 
       await dispatch(removeFromCartRequest(id));
@@ -100,9 +100,11 @@ export default function ShoppingBag() {
   const retrieveMinimalPurchaseValue = useCallback(async () => {
     try {
       setLoadingBag(true);
-      const { data } = await api.get('checkout/minimal-purchase');
+      const {
+        data: { data },
+      } = await api.get("checkout/minimal-purchase");
 
-      setMinimalPurchaseValue(data.data);
+      setMinimalPurchaseValue(data);
 
       setLoadingBag(false);
     } catch (err) {
@@ -111,7 +113,7 @@ export default function ShoppingBag() {
   }, []);
 
   const handleNavigateToCheckout = useCallback(async () => {
-    navigation.navigate(signed ? 'Checkout' : 'Auth');
+    navigation.navigate(signed ? "Checkout" : "Auth");
   }, [navigation, signed]);
 
   const handleUpdateAmount = useCallback(async (id, amount) => {
@@ -166,7 +168,7 @@ export default function ShoppingBag() {
             <ProductsListContainer>
               <ProductsList
                 data={products}
-                keyExtractor={product => String(product.id)}
+                keyExtractor={(product) => String(product.id)}
                 showsVerticalScrollIndicator={false}
                 renderItem={({ item: product }) => (
                   <ProductItem>
@@ -224,13 +226,13 @@ export default function ShoppingBag() {
                       </QuantityContainer>
 
                       <Total>
-                          €{' '}
-                          {(
-                            product.qty * 
-                            (product.has_promotion
-                              ? product.price_promotional
-                              : product.price)
-                          ).toFixed(2)}
+                        €{" "}
+                        {(
+                          product.qty *
+                          (product.has_promotion
+                            ? product.price_promotional
+                            : product.price)
+                        ).toFixed(2)}
                       </Total>
                     </ProductBottomRow>
                   </ProductItem>

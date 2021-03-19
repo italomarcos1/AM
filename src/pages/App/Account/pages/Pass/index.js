@@ -1,24 +1,26 @@
-import React, { useCallback, useRef, useState } from 'react';
-import { Keyboard, KeyboardAvoidingView, Platform } from 'react-native';
-import { useSelector } from 'react-redux';
-import Toast from 'react-native-tiny-toast';
-import PropTypes from 'prop-types';
+import React, { useCallback, useRef, useState } from "react";
+import { Keyboard, KeyboardAvoidingView, Platform } from "react-native";
+import { useSelector } from "react-redux";
+import Toast from "react-native-tiny-toast";
+import PropTypes from "prop-types";
 
-import Validation from '~/components/Validation';
-import ButtonMenu from '~/components/ButtonMenu';
-import InputMenu from '~/components/InputMenu';
-import Header from '~/components/HeaderMenu';
+import Validation from "~/components/Validation";
+import ButtonMenu from "~/components/ButtonMenu";
+import InputMenu from "~/components/InputMenu";
+import Header from "~/components/HeaderMenu";
 
-import api from '~/services/api';
+import api from "~/services/api";
 
-import { Container, InputContainer, InputName } from './styles';
+import { Container, InputContainer, InputName } from "./styles";
+
+//champ
 
 export default function Pass({ navigation }) {
-  const [oldPassword, setOldPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [error, setError] = useState(false);
-  const { email } = useSelector(state => state.user.profile);
+  const { email } = useSelector((state) => state.user.profile);
 
   const newPasswordRef = useRef();
 
@@ -35,25 +37,25 @@ export default function Pass({ navigation }) {
         throw new Error();
       }
 
-      await api.post('auth/login', {
+      await api.post("auth/login", {
         email,
         password: oldPassword,
       });
 
       setLoading(false);
 
-      await api.put('clients/password', {
+      await api.put("clients/password", {
         password: newPassword,
         password_confirmation: confirmNewPassword,
       });
 
-      Toast.showSuccess('Senha atualizada com sucesso.');
+      Toast.showSuccess("Senha atualizada com sucesso.");
       navigation.goBack();
     } catch (err) {
       setLoading(false);
       setError(true);
       Toast.show(
-        'Ocorreu um erro. Confira se as senhas conferem e tente novamente.'
+        "Ocorreu um erro. Confira se as senhas conferem e tente novamente."
       );
     }
   }, [newPassword, confirmNewPassword, navigation, email, oldPassword]);
@@ -66,16 +68,16 @@ export default function Pass({ navigation }) {
       <KeyboardAvoidingView
         style={{
           flex: 1,
-          flexDirection: 'column',
-          justifyContent: 'center',
+          flexDirection: "column",
+          justifyContent: "center",
         }}
         behavior="padding"
-        enabled={Platform.OS === 'ios'}
+        enabled={Platform.OS === "ios"}
         keyboardVerticalOffset={0}
       >
         <Container
           contentContainerStyle={{
-            alignItems: 'center',
+            alignItems: "center",
             paddingBottom: 30,
           }}
         >
@@ -86,7 +88,7 @@ export default function Pass({ navigation }) {
               autoCorrect={false}
               maxLength={45}
               selected={!!oldPassword}
-              clear={() => setOldPassword('')}
+              clear={() => setOldPassword("")}
               value={oldPassword}
               onChangeText={setOldPassword}
               returnKeyType="next"
@@ -101,7 +103,7 @@ export default function Pass({ navigation }) {
               autoCorrect={false}
               maxLength={45}
               selected={!!newPassword}
-              clear={() => setNewPassword('')}
+              clear={() => setNewPassword("")}
               ref={newPasswordRef}
               value={newPassword}
               onChangeText={setNewPassword}
@@ -117,7 +119,7 @@ export default function Pass({ navigation }) {
               autoCorrect={false}
               maxLength={45}
               selected={!!confirmNewPassword}
-              clear={() => setConfirmNewPassword('')}
+              clear={() => setConfirmNewPassword("")}
               ref={confirmNewPasswordRef}
               value={confirmNewPassword}
               onChangeText={setConfirmNewPassword}

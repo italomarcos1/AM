@@ -1,7 +1,7 @@
-import React from 'react';
-import { Text } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import PropTypes from 'prop-types';
+import React, { useMemo } from "react";
+import { Text } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import PropTypes from "prop-types";
 
 import {
   DeliveryStatus,
@@ -14,17 +14,23 @@ import {
   Details,
   ShippingDetails,
   ShippingStatus,
-} from './styles';
+} from "./styles";
 
 export default function OrderInfo({ transaction }) {
   const navigation = useNavigation();
+
+  const { id, total, statuses, date } = transaction;
+
+  const shipping = useMemo(() => {
+    return !!transaction.shipping ? transaction.shipping : 0;
+  }, [transaction]);
 
   return (
     <Item>
       <OrderNumberContainer>
         <ContentContainer>
-          <Text style={{ fontSize: 15, fontWeight: 'bold' }}>
-            {`Encomenda ${transaction.id}`}
+          <Text style={{ fontSize: 15, fontWeight: "bold" }}>
+            {`Encomenda ${id}`}
           </Text>
         </ContentContainer>
       </OrderNumberContainer>
@@ -32,42 +38,38 @@ export default function OrderInfo({ transaction }) {
       <Order>
         <ContentContainer>
           <Content>Produtos</Content>
-          <Content>{`€ ${transaction.total}`}</Content>
+          <Content>{`€ ${total}`}</Content>
         </ContentContainer>
 
         <ContentContainer>
           <Content>Porte</Content>
           <Content>
-            {transaction.shipping > 0
-              ? `€ ${transaction.shipping.toFixed(2)}`
-              : 'Grátis'}
+            {shipping !== 0 ? `€ ${shipping.toFixed(2)}` : "Grátis"}
           </Content>
         </ContentContainer>
 
         <ContentContainer>
           <Content>Total de encomenda</Content>
-          <Content>{`€ ${(transaction.total + transaction.shipping).toFixed(
-            2
-          )}`}</Content>
+          <Content>{`€ ${(total + shipping).toFixed(2)}`}</Content>
         </ContentContainer>
       </Order>
 
       <ShippingDetails>
         <DeliveryStatus>
           <Content>Estado da Encomenda</Content>
-          <ShippingStatus>{transaction.current_status}</ShippingStatus>
+          <ShippingStatus>{statuses[0].name}</ShippingStatus>
         </DeliveryStatus>
       </ShippingDetails>
 
       <Details
         onPress={() =>
-          navigation.navigate('Details', {
-            id: transaction.id,
-            created: transaction.created,
+          navigation.navigate("Details", {
+            id,
+            created: date,
           })
         }
       >
-        <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Detalhes</Text>
+        <Text style={{ fontSize: 16, fontWeight: "bold" }}>Detalhes</Text>
       </Details>
     </Item>
   );
@@ -75,7 +77,7 @@ export default function OrderInfo({ transaction }) {
 
 OrderInfo.propTypes = {
   transaction: PropTypes.shape({
-    id: PropTypes.number,
+    id: PropTypes.number || PropTypes.string,
     current_status: PropTypes.string,
     total: PropTypes.number,
     shipping: PropTypes.number,

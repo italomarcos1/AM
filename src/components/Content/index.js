@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { TouchableOpacity, Dimensions, Animated, Platform } from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
-import HTML from 'react-native-render-html';
-import PropTypes from 'prop-types';
-import { isIphoneX } from 'react-native-iphone-x-helper';
+import React, { useEffect, useState } from "react";
+import { TouchableOpacity, Dimensions, Animated, Platform } from "react-native";
+import Icon from "react-native-vector-icons/Feather";
+import HTML from "react-native-render-html";
+import PropTypes from "prop-types";
+import { isIphoneX } from "react-native-iphone-x-helper";
 
-import api from '~/services/api';
+import api from "~/services/api";
 
-import PlaceholderImage from '~/assets/placeholder.svg';
+import PlaceholderImage from "~/assets/placeholder.svg";
 
 import {
   Container,
@@ -16,29 +16,41 @@ import {
   Title,
   ImageContainer,
   Thumb,
-} from './styles';
+} from "./styles";
+import Toast from "react-native-tiny-toast";
 
 Icon.loadFont();
+
+// champ
 
 export default function Content({ navigation, route }) {
   const [pageInfo, setPageInfo] = useState(
     '<div style="align-items:center"><h3 style="color: #999">Carregando...</h1></div>'
   );
-  const [title, setTitle] = useState(route.params.title);
+
+  const { endpoint, title: contentTitle } = route.params;
+
+  const [title, setTitle] = useState(contentTitle);
   const [thumb, setThumb] = useState(null);
   const [banner, setBanner] = useState(null);
   const [bannerOpacity] = useState(new Animated.Value(0));
 
-  const { endpoint } = route.params;
-
   useEffect(() => {
     async function loadData() {
-      const response = await api.get(`${endpoint}`);
+      try {
+        const {
+          data: {
+            data: { description, title, thumbs, banner },
+          },
+        } = await api.get(`${endpoint}`);
 
-      setPageInfo(response.data.data.description);
-      setTitle(response.data.data.title);
-      setThumb(response.data.data.thumbs);
-      setBanner(response.data.data.banner);
+        setPageInfo(description);
+        setTitle(title);
+        setThumb(thumbs);
+        setBanner(banner);
+      } catch {
+        Toast.show("Houve um erro. Confira sua conexão à internet.");
+      }
     }
 
     loadData();
@@ -55,7 +67,7 @@ export default function Content({ navigation, route }) {
 
   return (
     <>
-      <Header isIphoneX={Platform.OS !== 'android' && isIphoneX}>
+      <Header isIphoneX={Platform.OS !== "android" && isIphoneX}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
@@ -70,7 +82,7 @@ export default function Content({ navigation, route }) {
         {banner !== null ? (
           <ImageContainer>
             <Thumb
-              width={Dimensions.get('window').width}
+              width={Dimensions.get("window").width}
               source={{
                 uri: `${thumb}`,
               }}
@@ -85,10 +97,10 @@ export default function Content({ navigation, route }) {
                 uri: `${banner}`,
               }}
               style={{
-                position: 'absolute',
+                position: "absolute",
                 opacity: bannerOpacity,
-                width: Dimensions.get('window').width,
-                height: Dimensions.get('window').width,
+                width: Dimensions.get("window").width,
+                height: Dimensions.get("window").width,
               }}
             />
           </ImageContainer>
@@ -99,10 +111,10 @@ export default function Content({ navigation, route }) {
         <TextContainer>
           <HTML
             html={pageInfo}
-            staticContentMaxWidth={Dimensions.get('window').width - 30}
+            staticContentMaxWidth={Dimensions.get("window").width - 30}
             imagesInitialDimensions={{
-              width: Dimensions.get('window').width - 30,
-              height: Math.round((Dimensions.get('window').width * 9) / 16),
+              width: Dimensions.get("window").width - 30,
+              height: Math.round((Dimensions.get("window").width * 9) / 16),
             }}
             tagsStyles={{
               img: {
@@ -118,19 +130,19 @@ export default function Content({ navigation, route }) {
                 fontSize: 17,
                 marginBottom: 15,
                 lineHeight: 30,
-                fontWeight: 'bold',
+                fontWeight: "bold",
               },
               li: {
                 fontSize: 17,
-                fontWeight: 'bold',
+                fontWeight: "bold",
               },
               h1: {
                 fontSize: 20,
-                fontWeight: 'bold',
+                fontWeight: "bold",
               },
               iframe: {
-                width: Dimensions.get('window').width - 30,
-                height: Math.round((Dimensions.get('window').width * 9) / 16),
+                width: Dimensions.get("window").width - 30,
+                height: Math.round((Dimensions.get("window").width * 9) / 16),
               },
             }}
           />

@@ -1,8 +1,8 @@
-import React from 'react';
-import { useNavigation } from '@react-navigation/native';
-import PropTypes from 'prop-types';
+import React from "react";
+import { useNavigation } from "@react-navigation/native";
+import PropTypes from "prop-types";
 
-import PlaceholderImage from '~/assets/placeholder.svg';
+import PlaceholderImage from "~/assets/placeholder.svg";
 
 import {
   Container,
@@ -10,7 +10,7 @@ import {
   ItemImage,
   InformationContainer,
   Title,
-} from './styles';
+} from "./styles";
 
 export default function CategoryItem({ item }) {
   const navigation = useNavigation();
@@ -20,13 +20,13 @@ export default function CategoryItem({ item }) {
   return (
     <Container
       onPress={() => {
-        if (item.all_children_categories.length !== 0) {
-          navigation.navigate('ChildrenCategories', {
-            items: item.all_children_categories,
+        if (item.all_categories.length !== 0) {
+          navigation.navigate("ChildrenCategories", {
+            items: item.all_categories,
             name: item.name,
           });
         } else {
-          navigation.navigate('Products', { id: item.id, name: item.name });
+          navigation.navigate("Products", { id: item.id, name: item.name });
         }
       }}
     >

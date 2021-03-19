@@ -1,16 +1,16 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
+import React, { useCallback, useEffect, useState, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 import {
   StatusBar,
   ActivityIndicator,
   PermissionsAndroid,
   Platform,
-} from 'react-native';
-import { captureRef } from 'react-native-view-shot';
-import ImagePicker from 'react-native-image-picker';
-import Toast from 'react-native-tiny-toast';
-import Icon from 'react-native-vector-icons/Feather';
+} from "react-native";
+import { captureRef } from "react-native-view-shot";
+import * as ImagePicker from "react-native-image-picker";
+import Toast from "react-native-tiny-toast";
+import Icon from "react-native-vector-icons/Feather";
 
 import {
   ImageContainer,
@@ -34,24 +34,26 @@ import {
   WelcomeContainer,
   WelcomeTitle,
   CbackValue,
-} from './styles';
+} from "./styles";
 
-import Header from '~/components/HeaderMenu';
-import Button from '~/components/Button';
-import CustomModal from '~/components/CustomModal';
-import InputMenu from '~/components/InputMenu';
+import Header from "~/components/HeaderMenu";
+import Button from "~/components/Button";
+import CustomModal from "~/components/CustomModal";
+import InputMenu from "~/components/InputMenu";
 
-import { signOut } from '~/store/modules/auth/actions';
-import { showTabBar, updateProfileSuccess } from '~/store/modules/user/actions';
+import { signOut } from "~/store/modules/auth/actions";
+import { showTabBar, updateProfileSuccess } from "~/store/modules/user/actions";
 
-import api from '~/services/api';
+import api from "~/services/api";
+
+//champ
 
 export default function Main() {
   const dispatch = useDispatch();
 
-  const user = useSelector(state => state.user.profile);
-  const signed = useSelector(state => state.auth.signed);
-  const triggered = useSelector(state => state.user.triggered);
+  const user = useSelector((state) => state.user.profile);
+  const signed = useSelector((state) => state.auth.signed);
+  const triggered = useSelector((state) => state.user.triggered);
 
   const [modalNameVisible, setModalNameVisible] = useState(false);
   const [name, setName] = useState(user.name);
@@ -63,10 +65,10 @@ export default function Main() {
       try {
         setModalNameLoading(true);
 
-        await api.put('clients', { name, last_name });
+        await api.put("clients", { name, last_name });
         const updatedUser = { ...user, name, last_name };
 
-        Toast.showSuccess('Nome atualizado com sucesso.');
+        Toast.showSuccess("Nome atualizado com sucesso.");
 
         dispatch(updateProfileSuccess(updatedUser));
 
@@ -74,7 +76,7 @@ export default function Main() {
         setModalNameVisible(false);
       } catch (err) {
         setModalNameLoading(false);
-        Toast.show('Erro ao alterar nome.');
+        Toast.show("Erro ao alterar nome.");
       }
     } else {
       setModalNameVisible(false);
@@ -89,10 +91,10 @@ export default function Main() {
       try {
         setModalDocumentLoading(true);
 
-        await api.put('clients', { document });
+        await api.put("clients", { document });
         const updatedUser = { ...user, document };
 
-        Toast.showSuccess('NIF atualizado com sucesso.');
+        Toast.showSuccess("NIF atualizado com sucesso.");
 
         dispatch(updateProfileSuccess(updatedUser));
 
@@ -100,7 +102,7 @@ export default function Main() {
         setModalDocumentVisible(false);
       } catch (err) {
         setModalDocumentLoading(false);
-        Toast.show('Erro ao alterar NIF.');
+        Toast.show("Erro ao alterar NIF.");
       }
     } else {
       setModalDocumentVisible(false);
@@ -115,10 +117,10 @@ export default function Main() {
       try {
         setModalCellphoneLoading(true);
 
-        await api.put('clients', { cellphone });
+        await api.put("clients", { cellphone });
         const updatedUser = { ...user, cellphone };
 
-        Toast.showSuccess('Telemóvel atualizado com sucesso.');
+        Toast.showSuccess("Telemóvel atualizado com sucesso.");
 
         dispatch(updateProfileSuccess(updatedUser));
 
@@ -126,7 +128,7 @@ export default function Main() {
         setModalCellphoneVisible(false);
       } catch (err) {
         setModalCellphoneLoading(false);
-        Toast.show('Erro ao alterar Telemóvel.');
+        Toast.show("Erro ao alterar Telemóvel.");
       }
     } else {
       setModalCellphoneVisible(false);
@@ -141,10 +143,10 @@ export default function Main() {
       try {
         setModalGenderLoading(true);
 
-        await api.put('clients', { gender });
+        await api.put("clients", { gender });
         const updatedUser = { ...user, gender };
 
-        Toast.showSuccess('Gênero atualizado com sucesso.');
+        Toast.showSuccess("Gênero atualizado com sucesso.");
 
         dispatch(updateProfileSuccess(updatedUser));
 
@@ -152,7 +154,7 @@ export default function Main() {
         setModalGenderVisible(false);
       } catch (err) {
         setModalGenderLoading(false);
-        Toast.show('Erro ao alterar Gênero.');
+        Toast.show("Erro ao alterar Gênero.");
       }
     } else {
       setModalGenderVisible(false);
@@ -163,7 +165,7 @@ export default function Main() {
 
   useEffect(() => {
     if (triggered) {
-      navigation.navigate('Orders');
+      navigation.navigate("Orders");
     }
   }, [triggered, navigation]);
 
@@ -172,7 +174,7 @@ export default function Main() {
   const [profilePhoto, setProfilePhoto] = useState(
     user.avatar !== null
       ? user.avatar
-      : 'https://api.adorable.io/avatars/90/abott@adorable.png'
+      : "https://api.adorable.io/avatars/90/abott@adorable.png"
   );
 
   const [uploading, setUploading] = useState(false);
@@ -196,49 +198,49 @@ export default function Main() {
     if (hasPermission) return true;
 
     const status = await PermissionsAndroid.request(permission);
-    return status === 'granted';
+    return status === "granted";
   }
 
   const handleUploadAvatar = useCallback(async () => {
     try {
       const uri = await captureRef(captureViewRef, {
-        format: 'jpg',
+        format: "jpg",
         quality: 1,
       });
 
-      if (Platform.OS === 'android')
+      if (Platform.OS === "android")
         if (!(await hasAndroidPermission())) return;
 
       const upload = new FormData(); // eslint-disable-line
 
-      upload.append('avatar', {
+      upload.append("avatar", {
         uri,
-        type: 'image/jpeg',
+        type: "image/jpeg",
         name: `${user.name}-${Date.now()}.jpeg`,
       });
 
-      const response = await api.post('clients/avatars', upload);
+      const response = await api.post("clients/avatars", upload);
 
       Toast.showSuccess(response.data.meta.message);
     } catch (error) {
-      Toast.show('Erro no atualização da foto de perfil.');
+      Toast.show("Erro no atualização da foto de perfil.");
     }
 
     setUploading(false);
   }, [user.name]);
 
   const handleChoosePhoto = useCallback(() => {
-    const options = {
-      title: 'Selecionar imagem',
-      cancelButtonTitle: 'Cancelar',
-      takePhotoButtonTitle: 'Tirar foto',
-      chooseFromLibraryButtonTitle: 'Selecionar imagem da galeria',
-      mediaType: 'photo',
+    const pickerOptions = {
+      title: "Selecionar imagem",
+      cancelButtonTitle: "Cancelar",
+      takePhotoButtonTitle: "Tirar foto",
+      chooseFromLibraryButtonTitle: "Selecionar imagem da galeria",
+      mediaType: "photo",
     };
 
-    ImagePicker.showImagePicker(options, image => {
+    ImagePicker.showImagePicker(pickerOptions, (image) => {
       if (image.didCancel) return;
-      if (image.error) Toast.show('Erro ao selecionar a imagem.');
+      if (image.error) Toast.show("Erro ao selecionar a imagem.");
       else {
         setUploading(true);
 
@@ -279,9 +281,9 @@ export default function Main() {
             autoCapitalize="words"
             autoCorrect={false}
             maxLength={25}
-            clear={() => setName('')}
+            clear={() => setName("")}
             value={name}
-            onChangeText={value => setName(value)}
+            onChangeText={(value) => setName(value)}
             returnKeyType="next"
             onSubmitEditing={() => lastNameRef.current.focus()}
           />
@@ -293,10 +295,10 @@ export default function Main() {
             autoCapitalize="words"
             autoCorrect={false}
             maxLength={45}
-            clear={() => setLastName('')}
+            clear={() => setLastName("")}
             value={last_name}
             ref={lastNameRef}
-            onChangeText={value => setLastName(value)}
+            onChangeText={(value) => setLastName(value)}
             returnKeyType="send"
             onSubmitEditing={handleEditName}
           />
@@ -320,9 +322,9 @@ export default function Main() {
             label="NIF"
             autoCorrect={false}
             maxLength={45}
-            clear={() => setDocument('')}
+            clear={() => setDocument("")}
             value={document}
-            onChangeText={value => setDocument(value)}
+            onChangeText={(value) => setDocument(value)}
             returnKeyType="send"
             onSubmitEditing={handleEditDocument}
           />
@@ -346,9 +348,9 @@ export default function Main() {
             label="Telemóvel"
             autoCorrect={false}
             maxLength={45}
-            clear={() => setCellphone('')}
+            clear={() => setCellphone("")}
             value={cellphone}
-            onChangeText={value => setCellphone(value)}
+            onChangeText={(value) => setCellphone(value)}
             returnKeyType="send"
             onSubmitEditing={handleEditCellphone}
           />
@@ -368,23 +370,23 @@ export default function Main() {
         }}
       >
         <OptionsContainer>
-          <Option onPress={() => setGender('Masculino')}>
+          <Option onPress={() => setGender("Masculino")}>
             <RadioButtonBackground>
-              <Selected selected={gender === 'Masculino'} />
+              <Selected selected={gender === "Masculino"} />
             </RadioButtonBackground>
             <RadioText>Masculino</RadioText>
           </Option>
 
-          <Option onPress={() => setGender('Feminino')}>
+          <Option onPress={() => setGender("Feminino")}>
             <RadioButtonBackground>
-              <Selected selected={gender === 'Feminino'} />
+              <Selected selected={gender === "Feminino"} />
             </RadioButtonBackground>
             <RadioText>Feminino</RadioText>
           </Option>
 
-          <Option last={true} onPress={() => setGender('Outro')}>
+          <Option last={true} onPress={() => setGender("Outro")}>
             <RadioButtonBackground>
-              <Selected selected={gender === 'Outro'} />
+              <Selected selected={gender === "Outro"} />
             </RadioButtonBackground>
             <RadioText>Outro</RadioText>
           </Option>
@@ -393,7 +395,7 @@ export default function Main() {
 
       <Container
         contentContainerStyle={{
-          alignItems: 'center',
+          alignItems: "center",
           paddingBottom: 30,
         }}
       >
@@ -459,18 +461,18 @@ export default function Main() {
         <Content>
           <Item
             disabled={!!user.email_verified}
-            onPress={() => navigation.navigate('Mail')}
+            onPress={() => navigation.navigate("Mail")}
           >
             <VerifiedFieldContainer>
               <Field>E-mail</Field>
               <VerifiedField verified={!!user.email_verified}>
-                {user.email_verified ? 'Verificado' : 'Não-verificado'}
+                {user.email_verified ? "Verificado" : "Não-verificado"}
               </VerifiedField>
             </VerifiedFieldContainer>
 
             <Value>
               {user.email === null
-                ? 'Nenhum endereço de e-mail foi cadastrado'
+                ? "Nenhum endereço de e-mail foi cadastrado"
                 : user.email}
             </Value>
           </Item>
@@ -478,7 +480,7 @@ export default function Main() {
         </Content>
 
         <Content>
-          <Item onPress={() => navigation.navigate('Pass')}>
+          <Item onPress={() => navigation.navigate("Pass")}>
             <Field>Palavra-passe</Field>
             <Value>******</Value>
           </Item>
@@ -487,14 +489,14 @@ export default function Main() {
 
         <Content>
           <Item
-            onPress={() => navigation.navigate('Shipping')}
-            style={{ borderBottomColor: 'transparent', borderBottomWidth: 0 }}
+            onPress={() => navigation.navigate("Shipping")}
+            style={{ borderBottomColor: "transparent", borderBottomWidth: 0 }}
           >
             <Field>Endereços de entrega</Field>
             <Value>
               {user.default_address.length !== 0
                 ? `${user.default_address.address}, ${user.default_address.district}`
-                : 'Nenhum endereço cadastrado.'}
+                : "Nenhum endereço cadastrado."}
             </Value>
           </Item>
           <Icon name="chevron-right" size={20} color="#A4A4AC" />
@@ -502,8 +504,8 @@ export default function Main() {
 
         <Content>
           <Item
-            onPress={() => navigation.navigate('Orders')}
-            style={{ borderBottomColor: 'transparent', borderBottomWidth: 0 }}
+            onPress={() => navigation.navigate("Orders")}
+            style={{ borderBottomColor: "transparent", borderBottomWidth: 0 }}
           >
             <Value>Minhas encomendas</Value>
           </Item>
@@ -512,7 +514,7 @@ export default function Main() {
 
         <Button
           style={{
-            backgroundColor: '#f53030',
+            backgroundColor: "#f53030",
             height: 40,
             maxWidth: 200,
             marginTop: 20,

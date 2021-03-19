@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import {
   BackHandler,
   Text,
@@ -8,21 +8,21 @@ import {
   Platform,
   KeyboardAvoidingView,
   Image,
-} from 'react-native';
-import Toast from 'react-native-tiny-toast';
-import { AccessToken, LoginManager } from 'react-native-fbsdk';
+} from "react-native";
+import Toast from "react-native-tiny-toast";
+import { AccessToken, LoginManager } from "react-native-fbsdk";
 import appleAuth, {
   AppleButton,
-} from '@invertase/react-native-apple-authentication';
-import OneSignal from 'react-native-onesignal';
+} from "@invertase/react-native-apple-authentication";
+import OneSignal from "react-native-onesignal";
 
-import Icon from 'react-native-vector-icons/FontAwesome';
-import CustomIcon from 'react-native-vector-icons/Feather';
+import Icon from "react-native-vector-icons/FontAwesome";
+import CustomIcon from "react-native-vector-icons/Feather";
 
-import Input from '~/components/Input';
-import Button from '~/components/Button';
+import Input from "~/components/Input";
+import Button from "~/components/Button";
 
-import Fruits from '~/assets/fruits.jpg';
+import Fruits from "~/assets/fruits.jpg";
 
 import {
   Container,
@@ -33,14 +33,16 @@ import {
   RegisterText,
   Form,
   ForgotPassword,
-} from './styles';
+} from "./styles";
 
-import { signInRequest, signInSuccess } from '~/store/modules/auth/actions';
-import { hideTabBar } from '~/store/modules/user/actions';
+import { signInRequest, signInSuccess } from "~/store/modules/auth/actions";
+import { hideTabBar } from "~/store/modules/user/actions";
 
-import api from '~/services/api';
+import api from "~/services/api";
 
 Icon.loadFont();
+
+//champ
 
 export default function Auth() {
   const dispatch = useDispatch();
@@ -48,10 +50,10 @@ export default function Auth() {
 
   const loading = useSelector((state) => state.auth.loading);
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [forgotPassword, setForgotPassword] = useState('');
-  const [selected, setSelected] = useState('none');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [forgotPassword, setForgotPassword] = useState("");
+  const [selected, setSelected] = useState("none");
 
   const [forgotPasswordModal, setForgotPasswordVisible] = useState(false);
   const [updating, setUpdating] = useState(false);
@@ -59,7 +61,7 @@ export default function Auth() {
   const passwordRef = useRef();
 
   const login = useCallback(() => {
-    setSelected('none');
+    setSelected("none");
     dispatch(signInRequest(email, password));
 
     setTimeout(function () {
@@ -70,15 +72,15 @@ export default function Auth() {
   useFocusEffect(
     React.useCallback(() => {
       const onBackPress = () => {
-        navigation.navigate('Bag');
+        navigation.navigate("Bag");
         return true;
       };
 
-      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
 
       return () =>
-        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-    }, [navigation]),
+        BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+    }, [navigation])
   );
 
   const onAppleButtonPress = useCallback(async () => {
@@ -89,12 +91,12 @@ export default function Auth() {
       });
 
       const credentialState = await appleAuth.getCredentialStateForUser(
-        appleAuthRequestResponse.user,
+        appleAuthRequestResponse.user
       );
 
       if (credentialState === appleAuth.State.AUTHORIZED) {
         api
-          .post('auth/apple', appleAuthRequestResponse)
+          .post("auth/apple", appleAuthRequestResponse)
           .then((response) => {
             const { token, user } = response.data.data;
             api.defaults.headers.Authorization = `Bearer ${token}`;
@@ -106,13 +108,13 @@ export default function Auth() {
             }, 100);
           })
           .catch(() => {
-            Toast.show('Erro ao logar com Apple. Logue com seu e-mail.');
+            Toast.show("Erro ao logar com Apple. Logue com seu e-mail.");
           });
       } else {
-        Toast.show('Não foi possível fazer login, utilize seu email e senha.');
+        Toast.show("Não foi possível fazer login, utilize seu email e senha.");
       }
     } else {
-      Toast.show('Seu dispositivo não tem suporte para esta funcionalidade.');
+      Toast.show("Seu dispositivo não tem suporte para esta funcionalidade.");
     }
   }, [dispatch, navigation]);
 
@@ -129,7 +131,7 @@ export default function Auth() {
       setUpdating(true);
       const {
         data: { meta },
-      } = await api.post('auth/reset-password', { email: forgotPassword });
+      } = await api.post("auth/reset-password", { email: forgotPassword });
 
       setForgotPasswordVisible(false);
       Toast.show(meta.message);
@@ -137,23 +139,23 @@ export default function Auth() {
     } catch (err) {
       setUpdating(false);
 
-      Toast.show('Não foi possível resetar sua senha.');
+      Toast.show("Não foi possível resetar sua senha.");
       setForgotPasswordVisible(false);
     }
   }, [forgotPassword]);
 
   const handleFacebookLogin = useCallback(() => {
-    setSelected('none');
+    setSelected("none");
 
     LoginManager.logOut();
 
-    LoginManager.logInWithPermissions(['public_profile', 'email'])
+    LoginManager.logInWithPermissions(["public_profile", "email"])
       .then(() => {
         AccessToken.getCurrentAccessToken().then((data) => {
           const { accessToken, userID } = data;
 
           api
-            .post('auth/facebook', {
+            .post("auth/facebook", {
               token: accessToken,
               userID,
             })
@@ -169,13 +171,13 @@ export default function Auth() {
               }, 100);
             })
             .catch(() => {
-              Toast.show('Erro ao logar com Facebook. Logue com seu e-mail.');
+              Toast.show("Erro ao logar com Facebook. Logue com seu e-mail.");
             });
         });
       })
       .catch(() => {
         Toast.show(
-          'Não foi possível fazer login com Facebook, por favor entre com seu email',
+          "Não foi possível fazer login com Facebook, por favor entre com seu email"
         );
       });
   }, [dispatch, navigation]);
@@ -184,20 +186,22 @@ export default function Auth() {
     <KeyboardAvoidingView
       style={{
         flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
+        flexDirection: "column",
+        justifyContent: "center",
       }}
       behavior="padding"
-      enabled={Platform.OS === 'ios'}
-      keyboardVerticalOffset={0}>
+      enabled={Platform.OS === "ios"}
+      keyboardVerticalOffset={0}
+    >
       <Container
         contentContainerStyle={{
-          alignItems: 'center',
-          justifyContent: 'center',
+          alignItems: "center",
+          justifyContent: "center",
           paddingBottom: 30,
           paddingTop: 50,
-        }}>
-        <CloseModal onPress={() => navigation.navigate('Home')}>
+        }}
+      >
+        <CloseModal onPress={() => navigation.navigate("Home")}>
           <CustomIcon name="x" size={25} color="#000" />
         </CloseModal>
 
@@ -214,11 +218,11 @@ export default function Auth() {
               height: 55,
               borderRadius: 30,
               marginBottom: 10,
-              width: '90%',
-              backgroundColor: '#f2f2f2',
+              width: "90%",
+              backgroundColor: "#f2f2f2",
             }}
-            onFocus={() => setSelected('email')}
-            selected={selected === 'email'}
+            onFocus={() => setSelected("email")}
+            selected={selected === "email"}
             autoCapitalize="none"
             autoCorrect={false}
             icon="user"
@@ -234,11 +238,11 @@ export default function Auth() {
               height: 55,
               borderRadius: 30,
               marginBottom: 10,
-              width: '90%',
-              backgroundColor: '#f2f2f2',
+              width: "90%",
+              backgroundColor: "#f2f2f2",
             }}
-            onFocus={() => setSelected('password')}
-            selected={selected === 'password'}
+            onFocus={() => setSelected("password")}
+            selected={selected === "password"}
             icon="lock"
             secureTextEntry
             placeholder="Sua senha"
@@ -252,8 +256,9 @@ export default function Auth() {
           <ForgotPassword
             onPress={() => {
               setForgotPasswordVisible(true);
-            }}>
-            <Text style={{ color: '#888', textAlign: 'center' }}>
+            }}
+          >
+            <Text style={{ color: "#888", textAlign: "center" }}>
               Recuperar Senha?
             </Text>
           </ForgotPassword>
@@ -264,12 +269,13 @@ export default function Auth() {
               marginBottom: 10,
               height: 50,
               borderRadius: 30,
-              backgroundColor: '#3b8e39',
+              backgroundColor: "#3b8e39",
             }}
             textSize={20}
             login
             loading={loading}
-            onPress={login}>
+            onPress={login}
+          >
             Entrar ou Registar
           </Button>
 
@@ -277,27 +283,29 @@ export default function Auth() {
             onPress={handleFacebookLogin}
             title="Continue with FB"
             style={{
-              backgroundColor: '#3B5998',
-            }}>
+              backgroundColor: "#3B5998",
+            }}
+          >
             <Icon name="facebook" color="#fff" size={20} />
             <Text
               style={{
                 fontSize: 20,
                 lineHeight: 22,
-                color: '#fff',
+                color: "#fff",
                 paddingHorizontal: 10,
-              }}>
+              }}
+            >
               Entrar com Facebook
             </Text>
           </FacebookButton>
 
-          {Platform.OS === 'ios' && Platform.Version >= '13.0' && (
+          {Platform.OS === "ios" && Platform.Version >= "13.0" && (
             <AppleButton
               buttonStyle={AppleButton.Style.BLACK}
               buttonType={AppleButton.Type.SIGN_IN}
               cornerRadius={50}
               style={{
-                width: '80%',
+                width: "80%",
                 height: 52,
                 marginTop: 10,
               }}
@@ -309,15 +317,17 @@ export default function Auth() {
 
       <Modal
         visible={forgotPasswordModal}
-        onRequestClose={setForgotPasswordVisible}>
+        onRequestClose={setForgotPasswordVisible}
+      >
         <Container
           contentContainerStyle={{
-            alignItems: 'center',
-            justifyContent: 'center',
+            alignItems: "center",
+            justifyContent: "center",
             paddingBottom: 30,
             paddingTop: 50,
             paddingHorizontal: 20,
-          }}>
+          }}
+        >
           <CloseModal onPress={() => setForgotPasswordVisible(false)}>
             <CustomIcon name="x" size={25} color="#000" />
           </CloseModal>
@@ -329,14 +339,15 @@ export default function Auth() {
           <Text
             style={{
               fontSize: 28,
-              fontWeight: 'bold',
-              color: '#000',
+              fontWeight: "bold",
+              color: "#000",
               marginTop: 40,
-            }}>
+            }}
+          >
             Recuperação de senha
           </Text>
 
-          <Text style={{ fontSize: 14, color: '#444', marginTop: 3 }}>
+          <Text style={{ fontSize: 14, color: "#444", marginTop: 3 }}>
             Será-lhe enviado um código para recuperar a senha
           </Text>
 
@@ -347,10 +358,10 @@ export default function Auth() {
                 borderRadius: 30,
                 marginBottom: 10,
                 marginTop: 20,
-                backgroundColor: '#f2f2f2',
+                backgroundColor: "#f2f2f2",
               }}
-              onFocus={() => setSelected('forgotpassword')}
-              selected={selected === 'forgotpassword'}
+              onFocus={() => setSelected("forgotpassword")}
+              selected={selected === "forgotpassword"}
               icon="mail"
               placeholder="Seu email"
               returnKeyType="send"
@@ -370,9 +381,10 @@ export default function Auth() {
                 marginBottom: 20,
                 height: 50,
                 borderRadius: 30,
-                backgroundColor: '#3b8e39',
+                backgroundColor: "#3b8e39",
                 width: 250,
-              }}>
+              }}
+            >
               Recuperar senha
             </Button>
           </Form>

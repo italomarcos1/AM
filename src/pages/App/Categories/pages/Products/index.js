@@ -1,25 +1,27 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { FlatList } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import Icon from 'react-native-vector-icons/Feather';
+import React, { useCallback, useEffect, useState } from "react";
+import { FlatList } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import Icon from "react-native-vector-icons/Feather";
 
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
-import api from '~/services/api';
-import { addFavorites } from '~/store/modules/cart/actions';
-import { showTabBar } from '~/store/modules/user/actions';
+import api from "~/services/api";
+import { addFavorites } from "~/store/modules/cart/actions";
+import { showTabBar } from "~/store/modules/user/actions";
 
-import ProductItem from '~/components/ProductItem';
-import BreadCrumb from '~/components/BreadCrumb';
-import Loader from '~/components/Loader';
+import ProductItem from "~/components/ProductItem";
+import BreadCrumb from "~/components/BreadCrumb";
+import Loader from "~/components/Loader";
 
-import { Container } from './styles';
+import { Container } from "./styles";
 
 Icon.loadFont();
 
+//champ
+
 export default function Products({ route }) {
-  const signed = useSelector(state => state.auth.signed);
-  const favs = useSelector(state => state.cart.favorites);
+  const signed = useSelector((state) => state.auth.signed);
+  const favs = useSelector((state) => state.cart.favorites);
 
   const dispatch = useDispatch();
 
@@ -34,8 +36,8 @@ export default function Products({ route }) {
   const loadFavorites = useCallback(async () => {
     const {
       data: { data, meta },
-    } = await api.get('clients/wishlists');
-    if (meta.message === 'Produtos favoritos retornados com sucesso') {
+    } = await api.get("clients/wishlists");
+    if (meta.message === "Produtos favoritos retornados com sucesso") {
       setFavorites(data);
       dispatch(addFavorites(data));
     } else {
@@ -48,12 +50,14 @@ export default function Products({ route }) {
     setLoading(true);
 
     const {
-      data: { data },
-    } = await api.get(`ecommerce/products?page=${page}&category_id=${id}`);
+      data: {
+        data: { data, last_page },
+      },
+    } = await api.get(`ecommerce/products/categories/${id}?page=${page}`);
 
-    setProducts([...products, ...data.data]);
+    setProducts([...products, ...data]);
     setPage(page + 1);
-    setLastPage(data.last_page);
+    setLastPage(last_page);
     setLoading(false);
   }, [page, lastPage, products]);
 
@@ -79,8 +83,8 @@ export default function Products({ route }) {
           showsVerticalScrollIndicator={false}
           data={products}
           numColumns={2}
-          style={{ flex: 1, width: '100%' }}
-          keyExtractor={item => String(item.id)}
+          style={{ flex: 1, width: "100%" }}
+          keyExtractor={(item) => String(item.id)}
           renderItem={({ item }) => <ProductItem item={item} />}
           onEndReached={() => loadProducts()}
           onEndReachedThreshold={0.3}

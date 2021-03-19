@@ -1,13 +1,13 @@
-import React from 'react';
+import React from "react";
 import {
   StatusBar,
   ScrollView,
   TouchableOpacity,
   Platform,
-} from 'react-native';
-import PropTypes from 'prop-types';
-import Icon from 'react-native-vector-icons/Feather';
-import { isIphoneX } from 'react-native-iphone-x-helper';
+} from "react-native";
+import PropTypes from "prop-types";
+import Icon from "react-native-vector-icons/Feather";
+import { isIphoneX } from "react-native-iphone-x-helper";
 
 import {
   Container,
@@ -18,9 +18,9 @@ import {
   Line,
   Header,
   SubContainer,
-} from './styles';
+} from "./styles";
 
-import Logo from '~/assets/logo-white.svg';
+import Logo from "~/assets/logo-white.svg";
 
 export default function ChildrenCategory({ route, navigation }) {
   const { categories, categoryName } = route.params;
@@ -28,12 +28,12 @@ export default function ChildrenCategory({ route, navigation }) {
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor="#12b118" />
-      <Header isIphoneX={Platform.OS !== 'android' && isIphoneX}>
+      <Header isIphoneX={Platform.OS !== "android" && isIphoneX}>
         <SubContainer>
           <TouchableOpacity
             style={{
-              alignItems: 'center',
-              justifyContent: 'center',
+              alignItems: "center",
+              justifyContent: "center",
             }}
             onPress={() => navigation.goBack()}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
@@ -46,33 +46,33 @@ export default function ChildrenCategory({ route, navigation }) {
       <Container>
         <ScrollView
           contentContainerStyle={{
-            backgroundColor: '#12b118',
+            backgroundColor: "#12b118",
             flex: 1,
           }}
         >
           <OptionsContainer>
             <OptionsTitle>{categoryName}</OptionsTitle>
-            {categories.map(category => (
+            {categories.map((category) => (
               <>
                 <Line />
 
                 <Option
                   key={category.id}
                   onPress={() => {
-                    if (category.all_children_categories.length === 0) {
-                      navigation.navigate('Category', {
+                    if (category.all_categories.length === 0) {
+                      navigation.navigate("Category", {
                         id: category.id,
                       });
                     } else {
-                      navigation.navigate('ChildrenCategory', {
-                        categories: category.all_children_categories,
+                      navigation.navigate("ChildrenCategory", {
+                        categories: category.all_categories,
                         categoryName: category.name,
                       });
                     }
                   }}
                 >
                   <OptionText>{category.name}</OptionText>
-                  {category.all_children_categories.length !== 0 ? (
+                  {category.all_categories.length !== 0 ? (
                     <Icon name="plus" color="#000" size={20} />
                   ) : (
                     <Icon />

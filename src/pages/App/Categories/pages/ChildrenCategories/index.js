@@ -1,11 +1,11 @@
-import React from 'react';
-import { FlatList } from 'react-native';
-import PropTypes from 'prop-types';
+import React from "react";
+import { FlatList } from "react-native";
+import PropTypes from "prop-types";
 
-import CategoryItem from '~/components/CategoryItem';
-import BreadCrumb from '~/components/BreadCrumb';
+import CategoryItem from "~/components/CategoryItem";
+import BreadCrumb from "~/components/BreadCrumb";
 
-import { Container } from './styles';
+import { Container } from "./styles";
 
 export default function ChildrenCategories({ route }) {
   const { items, name } = route.params;
@@ -18,11 +18,11 @@ export default function ChildrenCategories({ route }) {
           showsVerticalScrollIndicator={false}
           data={items}
           numColumns={2}
-          style={{ flex: 1, width: '100%' }}
-          keyExtractor={item => String(item.id)}
+          style={{ flex: 1, width: "100%" }}
+          keyExtractor={(item) => String(item.id)}
           renderItem={({ item }) => (
             <CategoryItem
-              isCategory={item.all_children_categories.length !== 0}
+              isCategory={item.all_categories.length !== 0}
               item={item}
             />
           )}

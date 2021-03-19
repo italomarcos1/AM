@@ -1,16 +1,18 @@
-import React, { useCallback, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/Feather';
-import PropTypes from 'prop-types';
-import { isIphoneX } from 'react-native-iphone-x-helper';
-import { Platform } from 'react-native';
+import React, { useCallback, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import Icon from "react-native-vector-icons/Feather";
+import PropTypes from "prop-types";
+import { isIphoneX } from "react-native-iphone-x-helper";
+import { Platform } from "react-native";
 
-import api from '~/services/api';
+import api from "~/services/api";
 
-import { Container, MenuButton, InputContainer, Input } from './styles';
+import { Container, MenuButton, InputContainer, Input } from "./styles";
+
+//champ
 
 export default function Header({ result, searching }) {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const navigation = useNavigation();
 
   const handleSearch = useCallback(async () => {
@@ -18,26 +20,28 @@ export default function Header({ result, searching }) {
     searching(search);
     try {
       const {
-        data: { data },
-      } = await api.get(`ecommerce/products?search=${encoded}`);
+        data: {
+          data: { total, data },
+        },
+      } = await api.get(`ecommerce/products/search/${encoded}`);
 
-      if (data.total === 0 && data.data === []) result({ totalResults: 0 });
+      if (total === 0 && data.length === 0) result({ totalResults: 0 });
       else
         result({
-          totalResults: data.total,
-          results: data.data,
+          totalResults: total,
+          results: data,
         });
 
-      setSearch('');
+      setSearch("");
     } catch (err) {
-      setSearch('');
+      setSearch("");
     }
   }, [search, result]);
 
   return (
-    <Container isIphoneX={Platform.OS !== 'android' && isIphoneX}>
+    <Container isIphoneX={Platform.OS !== "android" && isIphoneX}>
       <MenuButton
-        onPress={() => navigation.navigate('Menu')}
+        onPress={() => navigation.navigate("Menu")}
         hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
       >
         <Icon size={35} name="menu" color="#fff" />

@@ -1,12 +1,14 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { FlatList } from 'react-native';
+import React, { useCallback, useEffect, useState } from "react";
+import { FlatList } from "react-native";
 
-import api from '~/services/api';
+import api from "~/services/api";
 
-import ContentItem from '~/components/ContentItem';
-import Loader from '~/components/Loader';
+import ContentItem from "~/components/ContentItem";
+import Loader from "~/components/Loader";
 
-import { Container } from './styles';
+import { Container } from "./styles";
+
+//champ
 
 export default function Deliveries() {
   const [deliveries, setDeliveries] = useState([]);
@@ -20,7 +22,7 @@ export default function Deliveries() {
 
     const {
       data: { data },
-    } = await api.get(`blog/categories/6/contents?page=${page}`);
+    } = await api.get(`blog/contents/categories/6?page=${page}`);
 
     setDeliveries([...deliveries, ...data.data]);
     setPage(page + 1);
@@ -42,8 +44,8 @@ export default function Deliveries() {
         showsVerticalScrollIndicator={false}
         data={deliveries}
         numColumns={2}
-        style={{ flex: 1, width: '100%' }}
-        keyExtractor={item => String(item.id)}
+        style={{ flex: 1, width: "100%" }}
+        keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => <ContentItem item={item} />}
         onEndReached={() => loadDeliveries()}
         onEndReachedThreshold={0.3}

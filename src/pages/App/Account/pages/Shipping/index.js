@@ -1,21 +1,21 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Text,
   TouchableOpacity,
   ActivityIndicator,
   StatusBar,
-} from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
-import Toast from 'react-native-tiny-toast';
+} from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import PropTypes from "prop-types";
+import Toast from "react-native-tiny-toast";
 
-import api from '~/services/api';
+import api from "~/services/api";
 
-import AddIcon from '~/assets/ico-add-address.svg';
-import EditAddressIcon from '~/assets/ico-edit-address.svg';
-import RemoveAddressIcon from '~/assets/ico-remove-address.svg';
+import AddIcon from "~/assets/ico-add-address.svg";
+import EditAddressIcon from "~/assets/ico-edit-address.svg";
+import RemoveAddressIcon from "~/assets/ico-remove-address.svg";
 
-import Header from '~/components/HeaderMenu';
+import Header from "~/components/HeaderMenu";
 
 import {
   Container,
@@ -29,18 +29,18 @@ import {
   NoAddressesContainer,
   RadioButtonBackground,
   Selected,
-} from './styles';
+} from "./styles";
 
-import { updateProfileSuccess } from '~/store/modules/user/actions';
+import { updateProfileSuccess } from "~/store/modules/user/actions";
 
 export default function Shipping({ navigation }) {
-  const user = useSelector(state => state.user.profile);
+  const user = useSelector((state) => state.user.profile);
   const { default_address } = user;
 
   const dispatch = useDispatch();
 
   const [selectedAddress, setSelectedAddress] = useState(
-    default_address.length !== 0 ? default_address.id : 'none'
+    default_address.length !== 0 ? default_address.id : "none"
   );
   const [selectedAddressId, setSelectedAddressId] = useState(
     default_address.length !== 0 ? default_address.id : -5
@@ -52,7 +52,7 @@ export default function Shipping({ navigation }) {
   const [addresses, setAddresses] = useState([]);
 
   const handleDeleteAddress = useCallback(
-    async id => {
+    async (id) => {
       try {
         await api.delete(`clients/addresses/${id}`);
 
@@ -62,13 +62,13 @@ export default function Shipping({ navigation }) {
         if (addresses.length === 1) {
           setAddresses([]);
         } else {
-          const filtered = addresses.filter(address => address.id !== id);
+          const filtered = addresses.filter((address) => address.id !== id);
           setAddresses(filtered);
         }
 
-        Toast.showSuccess('Endereço removido com sucesso.');
+        Toast.showSuccess("Endereço removido com sucesso.");
       } catch (err) {
-        Toast.show('Erro ao remover o endereço.');
+        Toast.show("Erro ao remover o endereço.");
       }
     },
     [addresses, user, dispatch]
@@ -89,9 +89,9 @@ export default function Shipping({ navigation }) {
 
       dispatch(updateProfileSuccess({ ...user, default_address: data }));
 
-      Toast.showSuccess('Endereço atualizado com sucesso.');
+      Toast.showSuccess("Endereço atualizado com sucesso.");
     } catch (err) {
-      Toast.show('Erro ao atualizar o endereço.');
+      Toast.show("Erro ao atualizar o endereço.");
     }
   }, [selectedAddressId, user, dispatch, default_address]);
 
@@ -99,8 +99,8 @@ export default function Shipping({ navigation }) {
     async function loadAdresses() {
       try {
         setLoading(true);
-        const { data } = await api.get('clients/addresses');
-        if (data.meta.message !== 'Você ainda não tem endereços cadastrados.') {
+        const { data } = await api.get("clients/addresses");
+        if (data.meta.message !== "Você ainda não tem endereços cadastrados.") {
           setAddresses(data.data);
           setNoAddresses(false);
         } else {
@@ -130,7 +130,7 @@ export default function Shipping({ navigation }) {
       />
       <Container
         contentContainerStyle={{
-          alignItems: 'center',
+          alignItems: "center",
           paddingHorizontal: 10,
           paddingTop: 10,
           paddingBottom: 20,
@@ -143,7 +143,7 @@ export default function Shipping({ navigation }) {
         )}
         {!loading &&
           !noAddresses &&
-          addresses.map(address => (
+          addresses.map((address) => (
             <Address
               key={String(address.id)}
               onPress={() => {
@@ -158,7 +158,7 @@ export default function Shipping({ navigation }) {
               </SideContainer>
 
               <AddressInfo>
-                <Text style={{ fontWeight: 'bold' }}>
+                <Text style={{ fontWeight: "bold" }}>
                   {address.destination_name && `${address.destination_name} `}
                   {address.destination_last_name &&
                     address.destination_last_name}
@@ -197,7 +197,7 @@ export default function Shipping({ navigation }) {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() =>
-                    navigation.navigate('EditAddress', { address })
+                    navigation.navigate("EditAddress", { address })
                   }
                   hitSlop={{ top: 5, bottom: 5, left: 5, right: 5 }}
                 >
@@ -214,7 +214,7 @@ export default function Shipping({ navigation }) {
           </NoAddressesContainer>
         )}
         <AddNewAddressButton
-          onPress={() => navigation.navigate('AddNewAddress')}
+          onPress={() => navigation.navigate("AddNewAddress")}
         >
           {addresses !== [] ? (
             <AddIcon height={60} width={60} />

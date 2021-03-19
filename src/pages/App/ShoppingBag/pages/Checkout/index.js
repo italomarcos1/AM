@@ -1,6 +1,12 @@
-import React, { useState, useRef, useCallback, useEffect,useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import React, {
+  useState,
+  useRef,
+  useCallback,
+  useEffect,
+  useMemo,
+} from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import {
   BackHandler,
   StatusBar,
@@ -10,17 +16,17 @@ import {
   Keyboard,
   ScrollView,
   View,
-} from 'react-native';
-import Toast from 'react-native-tiny-toast';
+} from "react-native";
+import Toast from "react-native-tiny-toast";
 
-import Header from '~/components/HeaderMenu';
-import InputMenu from '~/components/InputMenu';
-import CustomModal from '~/components/CustomModal';
-import OMButton from '~/components/OpenModalButton';
+import Header from "~/components/HeaderMenu";
+import InputMenu from "~/components/InputMenu";
+import CustomModal from "~/components/CustomModal";
+import OMButton from "~/components/OpenModalButton";
 
-import { updateProfileSuccess, setOrder } from '~/store/modules/user/actions';
+import { updateProfileSuccess, setOrder } from "~/store/modules/user/actions";
 
-import api from '~/services/api';
+import api from "~/services/api";
 
 import {
   ActivityIndicatorContainer,
@@ -47,19 +53,19 @@ import {
   Selected,
   RadioButtonBackground,
   RadioText,
-} from './styles';
+} from "./styles";
 
 export default function Checkout() {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const user = useSelector(state => state.user.profile);
-  const products = useSelector(state => state.cart.products);
+  const user = useSelector((state) => state.user.profile);
+  const products = useSelector((state) => state.cart.products);
 
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
 
   const [alertMessage, setAlertMessage] = useState(
-    'Preencha todos os campos para continuar!'
+    "Preencha todos os campos para continuar!"
   );
   const [alertMessageVisible, setAlertMessageVisible] = useState(false);
 
@@ -98,7 +104,7 @@ export default function Checkout() {
 
   const [modalAddressVisible, setModalAddressVisible] = useState(false);
   const [addresses, setAddresses] = useState([]);
-  const [selectedAddress, setSelectedAddress] = useState('new');
+  const [selectedAddress, setSelectedAddress] = useState("new");
 
   const [destinationName, setDestinationName] = useState(null);
   const [destinationLastName, setDestinationLastName] = useState(null);
@@ -128,12 +134,16 @@ export default function Checkout() {
   const [cbackCredit, setCbackCredit] = useState(0);
   const [total, setTotal] = useState(0);
 
-  const postcodeIsValid = useMemo(postcode => {
-    const postcodeValidation = new RegExp(
-      /^[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9]$/
-    );
-    return postcodeValidation.test(postcode);
-  },[]);
+  const postcodeValidation = useMemo(() => {
+    return new RegExp(/^[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9]$/);
+  }, []);
+
+  const postcodeIsValid = useCallback(
+    (postcode) => {
+      return postcodeValidation.test(postcode);
+    },
+    [postcodeValidation]
+  );
 
   const lookupAddress = useCallback(async () => {
     if (!postcodeIsValid(zipcode)) {
@@ -141,58 +151,58 @@ export default function Checkout() {
     }
     setLoading(true);
 
-    const [cod, ext] = zipcode.split('-');
-    Toast.show('A procurar endereço! Aguarde...');
+    const [cod, ext] = zipcode.split("-");
+    Toast.show("A procurar endereço! Aguarde...");
 
     try {
       const {
         data: { data },
       } = await api.get(`/postcodes/${cod}-${ext}`);
 
-      setAddress(data.address !== undefined ? data.address : '');
-      setDistrict(data.district !== undefined ? data.district : '');
-      setCity(data.city !== undefined ? data.city : '');
-      setState('Lisboa');
+      setAddress(data.address !== undefined ? data.address : "");
+      setDistrict(data.district !== undefined ? data.district : "");
+      setCity(data.city !== undefined ? data.city : "");
+      setState("Lisboa");
 
       setLoading(false);
     } catch (err) {
       setLoading(false);
-      setDestinationName('');
-      setDestinationLastName('');
-      setAddress('');
-      setDistrict('');
-      setCity('');
-      setState('');
-      Toast.show('Informe um código postal válido.');
+      setDestinationName("");
+      setDestinationLastName("");
+      setAddress("");
+      setDistrict("");
+      setCity("");
+      setState("");
+      Toast.show("Informe um código postal válido.");
     }
-  }, [zipcode,postcodeIsValid],);
+  }, [zipcode, postcodeIsValid]);
 
   useFocusEffect(
     React.useCallback(() => {
       const onBackPress = () => {
-        if (!user || !products.length) navigation.navigate('Bag');
+        if (!user || !products.length) navigation.navigate("Bag");
         return true;
       };
 
-      if (!user || !products.length) navigation.navigate('Bag');
+      if (!user || !products.length) navigation.navigate("Bag");
       else {
-        setName(user.name !== null && user.name.length ? user.name : '');
+        setName(user.name !== null && user.name.length ? user.name : "");
         setLastName(
-          user.last_name !== null && user.last_name.length ? user.last_name : ''
+          user.last_name !== null && user.last_name.length ? user.last_name : ""
         );
         setDocument(
-          user.document !== null && user.document.length ? user.document : ''
+          user.document !== null && user.document.length ? user.document : ""
         );
-        setEmail(user.email !== null && user.email.length ? user.email : '');
+        setEmail(user.email !== null && user.email.length ? user.email : "");
         setCellphone(
-          user.cellphone !== null && user.cellphone.length ? user.cellphone : ''
+          user.cellphone !== null && user.cellphone.length ? user.cellphone : ""
         );
       }
 
-      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
 
       return () =>
-        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+        BackHandler.removeEventListener("hardwareBackPress", onBackPress);
     }, [])
   );
 
@@ -214,7 +224,7 @@ export default function Checkout() {
         setAlertMessageVisible(false);
         setLoading(true);
 
-        await api.put('clients', { name, last_name, document, cellphone });
+        await api.put("clients", { name, last_name, document, cellphone });
         const updatedUser = { ...user, name, last_name, document, cellphone };
 
         dispatch(updateProfileSuccess(updatedUser));
@@ -223,7 +233,7 @@ export default function Checkout() {
         setCurrentStep(2);
       } catch (err) {
         setLoading(false);
-        Toast.show('Ocorreu um erro ao processar os dados.');
+        Toast.show("Ocorreu um erro ao processar os dados.");
       }
     } else {
       setAlertMessageVisible(false);
@@ -233,37 +243,37 @@ export default function Checkout() {
 
   const handleGoToPaymentStep = useCallback(async () => {
     if (selectedShippingMethod === null) {
-      setAlertMessage('Selecione o método de entrega.');
+      setAlertMessage("Selecione o método de entrega.");
       setAlertMessageVisible(true);
     } else if (
-      selectedShippingMethod.id === 'delivery' &&
+      selectedShippingMethod.id === "delivery" &&
       selectedDeliveryInterval === null
     ) {
-      setAlertMessage('Selecione o período para entrega.');
+      setAlertMessage("Selecione o período para entrega.");
       setAlertMessageVisible(true);
     } else if (
       zipcode === null ||
-      zipcode === '' ||
+      zipcode === "" ||
       address === null ||
-      address === '' ||
+      address === "" ||
       city === null ||
-      city === '' ||
+      city === "" ||
       district === null ||
-      district === '' ||
+      district === "" ||
       number === null ||
-      number === ''
+      number === ""
     ) {
-      setAlertMessage('Preencha todos os campos da morada.');
+      setAlertMessage("Preencha todos os campos da morada.");
       setAlertMessageVisible(true);
-      Toast.show('Preencha todos os campos da morada.');
-    } else if (selectedAddress === 'new') {
+      Toast.show("Preencha todos os campos da morada.");
+    } else if (selectedAddress === "new") {
       try {
         setAlertMessageVisible(false);
         setLoading(true);
 
         const {
           data: { data },
-        } = await api.post('clients/addresses', {
+        } = await api.post("clients/addresses", {
           destination_name: destinationName,
           destination_last_name: destinationLastName,
           zipcode,
@@ -283,10 +293,10 @@ export default function Checkout() {
         setCurrentStep(3);
       } catch (err) {
         setLoading(false);
-        Toast.show('Ocorreu um erro ao processar os dados.');
+        Toast.show("Ocorreu um erro ao processar os dados.");
       }
     } else if (
-      selectedAddress !== 'new' &&
+      selectedAddress !== "new" &&
       (address !== selectedAddress.address ||
         number !== selectedAddress.number ||
         city !== selectedAddress.city ||
@@ -318,7 +328,7 @@ export default function Checkout() {
         setCurrentStep(3);
       } catch (err) {
         setLoading(false);
-        Toast.show('Ocorreu um erro ao processar os dados.');
+        Toast.show("Ocorreu um erro ao processar os dados.");
       }
     } else {
       setAlertMessageVisible(false);
@@ -341,7 +351,7 @@ export default function Checkout() {
   ]);
 
   const loadCbackCredit = useCallback(async () => {
-    const { data } = await api.get('clients/cbacks');
+    const { data } = await api.get("clients/cbacks");
 
     const updatedUser = { ...user, cback_credit: data.data };
     dispatch(updateProfileSuccess(updatedUser));
@@ -360,7 +370,7 @@ export default function Checkout() {
 
   const handleConfirmPurchase = useCallback(async () => {
     try {
-      Toast.show('Processando sua Encomenda...\nPor favor aguarde.', {
+      Toast.show("Processando sua Encomenda...\nPor favor aguarde.", {
         loading: true,
         position: Toast.position.CENTER,
         duration: 0,
@@ -373,11 +383,11 @@ export default function Checkout() {
         data: {
           meta: { message },
         },
-      } = await api.post('checkout', {
+      } = await api.post("checkout", {
         shipping_address: selectedAddress,
         shippingMethod: selectedShippingMethod.id,
         voucher: voucher !== null ? voucher.voucher : null,
-        products: products.map(product => {
+        products: products.map((product) => {
           const { id, qty } = product;
 
           return {
@@ -387,11 +397,11 @@ export default function Checkout() {
         }),
         additional_information: additionalInformation,
         deliveryDate:
-          selectedShippingMethod.id === 'delivery'
+          selectedShippingMethod.id === "delivery"
             ? selectedDeliveryDate.id
             : null,
         deliveryInterval:
-          selectedShippingMethod.id === 'delivery'
+          selectedShippingMethod.id === "delivery"
             ? selectedDeliveryInterval.id
             : null,
       });
@@ -402,27 +412,29 @@ export default function Checkout() {
 
       loadCbackCredit();
 
-      navigation.navigate('PurchaseConfirmation', {
+      navigation.navigate("PurchaseConfirmation", {
         message,
       });
     } catch (err) {
       Toast.hide();
       Toast.show(err);
     }
-  },[additionalInformation,
-  loadCbackCredit,
-  dispatch,
-  navigation,
-  products,
-  selectedAddress,
-  selectedDeliveryDate,
-  selectedShippingMethod,
-  voucher,
-  selectedDeliveryInterval,]);
+  }, [
+    additionalInformation,
+    loadCbackCredit,
+    dispatch,
+    navigation,
+    products,
+    selectedAddress,
+    selectedDeliveryDate,
+    selectedShippingMethod,
+    voucher,
+    selectedDeliveryInterval,
+  ]);
 
   const handleApplyVoucher = useCallback(async () => {
     try {
-      if (inputVoucher === null || inputVoucher === '') return;
+      if (inputVoucher === null || inputVoucher === "") return;
 
       const {
         data: { data },
@@ -431,27 +443,27 @@ export default function Checkout() {
       setModalVoucherVisible(false);
       setVoucher(data);
       setDiscount(Number(subtotal * (data.discount / 100)).toFixed(2));
-      Toast.show('Cupom aplicado, aproveite o desconto');
+      Toast.show("Cupom aplicado, aproveite o desconto");
     } catch (err) {
       setVoucher(null);
       setDiscount(0);
-      setInputVoucher('');
+      setInputVoucher("");
       Toast.show(
-        'Cupom inválido ou sua encomenda não cumpre as regras exigidas.'
+        "Cupom inválido ou sua encomenda não cumpre as regras exigidas."
       );
     }
-  }, [inputVoucher,subtotal]);
+  }, [inputVoucher, subtotal]);
 
   useEffect(() => {
-    if (!user || !products.length) navigation.navigate('Bag');
+    if (!user || !products.length) navigation.navigate("Bag");
 
     async function loadAddresses() {
       try {
         setLoading(true);
 
-        const { data } = await api.get('clients/addresses');
+        const { data } = await api.get("clients/addresses");
 
-        if (data.meta.message !== 'Você ainda não tem endereços cadastrados.') {
+        if (data.meta.message !== "Você ainda não tem endereços cadastrados.") {
           setAddresses(data.data);
 
           setSelectedAddress(data.data[0]);
@@ -495,7 +507,7 @@ export default function Checkout() {
     }
 
     async function loadShippingCost() {
-      if (selectedShippingMethod.id === 'withdrawinstore') setShippingCost(0);
+      if (selectedShippingMethod.id === "withdrawinstore") setShippingCost(0);
       else {
         try {
           const { data } = await api.get(
@@ -531,7 +543,7 @@ export default function Checkout() {
       try {
         setLoading(true);
 
-        const { data } = await api.get('checkout/delivery-intervals');
+        const { data } = await api.get("checkout/delivery-intervals");
 
         setDeliveryDates(data.data);
         setSelectedDeliveryDate(data.data[0]);
@@ -546,13 +558,13 @@ export default function Checkout() {
 
     if (
       selectedShippingMethod !== null &&
-      selectedShippingMethod.id === 'delivery'
+      selectedShippingMethod.id === "delivery"
     )
       loadDeliveryPeriods();
   }, [selectedShippingMethod]);
 
   useEffect(() => {
-    if (selectedAddress === 'new') clearAddressForm();
+    if (selectedAddress === "new") clearAddressForm();
     else {
       setDestinationName(selectedAddress.destination_name);
       setDestinationLastName(selectedAddress.destination_last_name);
@@ -563,7 +575,7 @@ export default function Checkout() {
       setCity(selectedAddress.city);
       setState(selectedAddress.state);
     }
-  }, [selectedAddress,clearAddressForm]);
+  }, [selectedAddress, clearAddressForm]);
 
   useEffect(() => {
     function handleCalculateTotal() {
@@ -628,11 +640,11 @@ export default function Checkout() {
       <KeyboardAvoidingView
         style={{
           flex: 1,
-          flexDirection: 'column',
-          justifyContent: 'center',
+          flexDirection: "column",
+          justifyContent: "center",
         }}
         behavior="padding"
-        enabled={Platform.OS === 'ios'}
+        enabled={Platform.OS === "ios"}
         keyboardVerticalOffset={0}
       >
         <Container>
@@ -655,9 +667,9 @@ export default function Checkout() {
                     autoCapitalize="words"
                     autoCorrect={false}
                     maxLength={25}
-                    clear={() => setName('')}
+                    clear={() => setName("")}
                     value={name}
-                    onChangeText={value => setName(value)}
+                    onChangeText={(value) => setName(value)}
                     returnKeyType="next"
                     onSubmitEditing={() => lastNameRef.current.focus()}
                   />
@@ -669,10 +681,10 @@ export default function Checkout() {
                     autoCapitalize="words"
                     autoCorrect={false}
                     maxLength={45}
-                    clear={() => setLastName('')}
+                    clear={() => setLastName("")}
                     value={last_name}
                     ref={lastNameRef}
-                    onChangeText={value => setLastName(value)}
+                    onChangeText={(value) => setLastName(value)}
                     returnKeyType="next"
                     onSubmitEditing={() => documentRef.current.focus()}
                   />
@@ -683,10 +695,10 @@ export default function Checkout() {
                     label="NIF"
                     autoCorrect={false}
                     maxLength={45}
-                    clear={() => setDocument('')}
+                    clear={() => setDocument("")}
                     value={document}
                     ref={documentRef}
-                    onChangeText={value => setDocument(value)}
+                    onChangeText={(value) => setDocument(value)}
                     returnKeyType="next"
                     onSubmitEditing={() => cellphoneRef.current.focus()}
                   />
@@ -697,10 +709,10 @@ export default function Checkout() {
                     label="Telemóvel"
                     autoCorrect={false}
                     maxLength={45}
-                    clear={() => setCellphone('')}
+                    clear={() => setCellphone("")}
                     value={cellphone}
                     ref={cellphoneRef}
-                    onChangeText={value => setCellphone(value)}
+                    onChangeText={(value) => setCellphone(value)}
                     returnKeyType="send"
                     onSubmitEditing={handleGoToShippingStep}
                   />
@@ -726,12 +738,12 @@ export default function Checkout() {
                         selectedShippingMethod !== null
                           ? `${selectedShippingMethod.label} - ${
                               selectedShippingMethod.cost === 0
-                                ? 'Grátis'
+                                ? "Grátis"
                                 : `€ ${Number(
                                     selectedShippingMethod.cost
                                   ).toFixed(2)}`
                             }`
-                          : 'Selecione para continuar'
+                          : "Selecione para continuar"
                       }
                       onPress={() => {
                         setModalShippingMethodVisible(true);
@@ -768,7 +780,7 @@ export default function Checkout() {
 
                             <RadioText>{`${item.label} - ${
                               item.cost === 0
-                                ? 'Grátis'
+                                ? "Grátis"
                                 : `€ ${Number(item.cost).toFixed(2)}`
                             }`}</RadioText>
                           </Option>
@@ -781,7 +793,7 @@ export default function Checkout() {
                 <WarningMessage
                   visible={
                     selectedShippingMethod !== null &&
-                    selectedShippingMethod.id === 'withdrawinstore'
+                    selectedShippingMethod.id === "withdrawinstore"
                   }
                 >
                   A retirada na loja deve ocorrer no endereço abaixo: Av. da
@@ -789,7 +801,7 @@ export default function Checkout() {
                 </WarningMessage>
 
                 {selectedShippingMethod !== null &&
-                  selectedShippingMethod.id === 'delivery' &&
+                  selectedShippingMethod.id === "delivery" &&
                   deliveryDates.length > 0 && (
                     <>
                       <OMButton
@@ -797,7 +809,7 @@ export default function Checkout() {
                         text={
                           selectedDeliveryDate !== null
                             ? selectedDeliveryDate.label
-                            : 'Selecione para continuar'
+                            : "Selecione para continuar"
                         }
                         onPress={() => {
                           setModalDeliveryDateVisible(true);
@@ -842,7 +854,7 @@ export default function Checkout() {
                   )}
 
                 {selectedShippingMethod !== null &&
-                  selectedShippingMethod.id === 'delivery' &&
+                  selectedShippingMethod.id === "delivery" &&
                   selectedDeliveryDate !== null &&
                   deliveryIntervals.length > 0 && (
                     <>
@@ -851,7 +863,7 @@ export default function Checkout() {
                         text={
                           selectedDeliveryInterval !== null
                             ? selectedDeliveryInterval.label
-                            : 'Selecione para continuar'
+                            : "Selecione para continuar"
                         }
                         onPress={() => {
                           setModalDeliveryIntervalVisible(true);
@@ -901,9 +913,9 @@ export default function Checkout() {
                     <OMButton
                       label="Morada para entrega"
                       text={
-                        selectedAddress !== 'new'
+                        selectedAddress !== "new"
                           ? `${selectedAddress.address} ${selectedAddress.number} - ${selectedAddress.zipcode} ${selectedAddress.city} - ${selectedAddress.state}`
-                          : 'Nova Morada'
+                          : "Nova Morada"
                       }
                       onPress={() => {
                         setModalAddressVisible(true);
@@ -926,11 +938,11 @@ export default function Checkout() {
                       <OptionsContainer>
                         <Option
                           onPress={() => {
-                            setSelectedAddress('new');
+                            setSelectedAddress("new");
                           }}
                         >
                           <RadioButtonBackground>
-                            <Selected selected={selectedAddress === 'new'} />
+                            <Selected selected={selectedAddress === "new"} />
                           </RadioButtonBackground>
 
                           <RadioText>Nova Morada</RadioText>
@@ -962,7 +974,7 @@ export default function Checkout() {
                       label="Nome do destinatário"
                       maxLength={25}
                       autoCorrect={false}
-                      clear={() => setDestinationName('')}
+                      clear={() => setDestinationName("")}
                       ref={destinationNameRef}
                       value={destinationName}
                       onChangeText={setDestinationName}
@@ -978,7 +990,7 @@ export default function Checkout() {
                       label="Apelido do destinatário"
                       maxLength={25}
                       autoCorrect={false}
-                      clear={() => setDestinationLastName('')}
+                      clear={() => setDestinationLastName("")}
                       ref={numberRef}
                       value={destinationLastName}
                       onChangeText={setDestinationLastName}
@@ -994,7 +1006,7 @@ export default function Checkout() {
                       selected={!!zipcode}
                       autoCorrect={false}
                       keyboardType="phone-pad"
-                      clear={() => setZipcode('')}
+                      clear={() => setZipcode("")}
                       ref={zipcodeRef}
                       value={zipcode}
                       onChangeText={setZipcode}
@@ -1009,7 +1021,7 @@ export default function Checkout() {
                       maxLength={5}
                       autoCorrect={false}
                       keyboardType="phone-pad"
-                      clear={() => setNumber('')}
+                      clear={() => setNumber("")}
                       ref={numberRef}
                       value={number}
                       onChangeText={setNumber}
@@ -1023,7 +1035,7 @@ export default function Checkout() {
                       label="Morada"
                       autoCorrect={false}
                       maxLength={45}
-                      clear={() => setAddress('')}
+                      clear={() => setAddress("")}
                       ref={addressRef}
                       value={address}
                       onChangeText={setAddress}
@@ -1037,7 +1049,7 @@ export default function Checkout() {
                       label="Distrito"
                       autoCorrect={false}
                       maxLength={45}
-                      clear={() => setDistrict('')}
+                      clear={() => setDistrict("")}
                       ref={districtRef}
                       value={district}
                       onChangeText={setDistrict}
@@ -1050,7 +1062,7 @@ export default function Checkout() {
                     <InputMenu
                       label="Cidade"
                       maxLength={35}
-                      clear={() => setCity('')}
+                      clear={() => setCity("")}
                       autoCorrect={false}
                       ref={cityRef}
                       value={city}
@@ -1065,7 +1077,7 @@ export default function Checkout() {
                       label="Localidade"
                       maxLength={45}
                       autoCorrect={false}
-                      clear={() => setState('')}
+                      clear={() => setState("")}
                       ref={stateRef}
                       value={state}
                       onChangeText={setState}
@@ -1102,7 +1114,7 @@ export default function Checkout() {
                     </CardLabel>
                   </CardRow>
 
-                  {products.map(item => (
+                  {products.map((item) => (
                     <CardRow key={item.id}>
                       <CardLabel width={72}>
                         {item.title} <Small>(€{item.price})</Small>
@@ -1145,7 +1157,7 @@ export default function Checkout() {
                     <CardLabel>{selectedShippingMethod.label}</CardLabel>
                   </CardRow>
 
-                  {selectedShippingMethod.id === 'delivery' && (
+                  {selectedShippingMethod.id === "delivery" && (
                     <CardRow>
                       <CardLabel>Agendado para:</CardLabel>
                       <CardLabel>{`${selectedDeliveryDate.label} ${selectedDeliveryInterval.label}`}</CardLabel>
@@ -1166,7 +1178,7 @@ export default function Checkout() {
                     <CardLabel>
                       {shippingCost > 0
                         ? `€ ${Number(shippingCost).toFixed(2)}`
-                        : 'Grátis'}
+                        : "Grátis"}
                     </CardLabel>
                   </CardRow>
 
@@ -1217,9 +1229,9 @@ export default function Checkout() {
                               label="Cupom"
                               autoCorrect={false}
                               maxLength={45}
-                              clear={() => setInputVoucher('')}
+                              clear={() => setInputVoucher("")}
                               value={inputVoucher}
-                              onChangeText={value => setInputVoucher(value)}
+                              onChangeText={(value) => setInputVoucher(value)}
                               onSubmitEditing={handleApplyVoucher}
                             />
                           </InputContainer>
@@ -1241,9 +1253,9 @@ export default function Checkout() {
                     autoCorrect={false}
                     multiline={true}
                     numberOfLines={4}
-                    clear={() => setAdditionalInformation('')}
+                    clear={() => setAdditionalInformation("")}
                     value={additionalInformation}
-                    onChangeText={value => setAdditionalInformation(value)}
+                    onChangeText={(value) => setAdditionalInformation(value)}
                     returnKeyType="send"
                     onSubmitEditing={handleConfirmPurchase}
                   />

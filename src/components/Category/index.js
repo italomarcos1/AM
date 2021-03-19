@@ -1,27 +1,29 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { FlatList, Modal, ActivityIndicator } from 'react-native';
-import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
-import Toast from 'react-native-tiny-toast';
+import React, { useCallback, useEffect, useState } from "react";
+import { FlatList, Modal, ActivityIndicator } from "react-native";
+import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
+import Toast from "react-native-tiny-toast";
 
-import api from '~/services/api';
-import { addFavorites } from '~/store/modules/cart/actions';
+import api from "~/services/api";
+import { addFavorites } from "~/store/modules/cart/actions";
 
-import Header from '~/components/Header';
-import Search from '~/components/Search';
-import ProductItem from '~/components/ProductItem';
-import Loader from '~/components/Loader';
+import Header from "~/components/Header";
+import Search from "~/components/Search";
+import ProductItem from "~/components/ProductItem";
+import Loader from "~/components/Loader";
 
 import {
   Container,
   TransparentBackground,
   SearchingContainer,
   SearchingText,
-} from './styles';
+} from "./styles";
+
+//champ
 
 export default function Category({ route }) {
-  const signed = useSelector(state => state.auth.signed);
-  const favs = useSelector(state => state.cart.favorites);
+  const signed = useSelector((state) => state.auth.signed);
+  const favs = useSelector((state) => state.cart.favorites);
 
   const dispatch = useDispatch();
 
@@ -32,7 +34,7 @@ export default function Category({ route }) {
   const [loading, setLoading] = useState(false);
 
   const [searchResults, setSearchResults] = useState([]);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [total, setTotal] = useState(0);
   const [searching, setSearching] = useState(false);
   const [searchModalVisible, setSearchModalVisible] = useState(false);
@@ -42,8 +44,8 @@ export default function Category({ route }) {
   const loadFavorites = useCallback(async () => {
     const {
       data: { data, meta },
-    } = await api.get('clients/wishlists');
-    if (meta.code === 'Produtos favoritos retornados com sucesso') {
+    } = await api.get("clients/wishlists");
+    if (meta.message === "Produtos favoritos retornados com sucesso") {
       setFavorites(data);
       dispatch(addFavorites(data));
     } else {
@@ -56,12 +58,14 @@ export default function Category({ route }) {
     setLoading(true);
 
     const {
-      data: { data },
-    } = await api.get(`ecommerce/products?page=${page}&category_id=${id}`);
+      data: {
+        data: { data, last_page },
+      },
+    } = await api.get(`ecommerce/products/categories/${id}?page=${page}`);
 
-    setItems([...items, ...data.data]);
+    setItems([...items, ...data]);
     setPage(page + 1);
-    setLastPage(data.last_page);
+    setLastPage(last_page);
     setLoading(false);
   }, [page, lastPage, items]);
 
@@ -79,7 +83,7 @@ export default function Category({ route }) {
   return (
     <>
       <Header
-        searching={value => {
+        searching={(value) => {
           setSearch(value);
           setSearching(true);
         }}
@@ -103,8 +107,8 @@ export default function Category({ route }) {
           showsVerticalScrollIndicator={false}
           data={items}
           numColumns={2}
-          style={{ flex: 1, width: '100%' }}
-          keyExtractor={item => String(item.id)}
+          style={{ flex: 1, width: "100%" }}
+          keyExtractor={(item) => String(item.id)}
           renderItem={({ item }) => <ProductItem item={item} />}
           onEndReached={() => loadItems()}
           onEndReachedThreshold={0.3}

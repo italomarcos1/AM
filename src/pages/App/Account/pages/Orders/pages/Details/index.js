@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
-import Toast from 'react-native-tiny-toast';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState, useCallback } from "react";
+import { View, Text, ActivityIndicator } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
+import Toast from "react-native-tiny-toast";
+import PropTypes from "prop-types";
 
 import {
   Container,
@@ -24,21 +24,21 @@ import {
   Info,
   Price,
   Small,
-} from './styles';
+} from "./styles";
 
-import api from '~/services/api';
-import { addToCartRequest } from '~/store/modules/cart/actions';
+import api from "~/services/api";
+import { addToCartRequest } from "~/store/modules/cart/actions";
 
-import OrderItem from './components/OrderItem';
+import OrderItem from "./components/OrderItem";
 
 export default function Details({ route }) {
   const dispatch = useDispatch();
-  const user = useSelector(state => state.user.profile);
+  const user = useSelector((state) => state.user.profile);
 
   const { id, created } = route.params;
 
   const [transaction, setTransaction] = useState({});
-  const [shippingAddress, setShippingAddress] = useState({});
+  const [shippingAddress, setShippingAddress] = useState(null);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -54,20 +54,20 @@ export default function Details({ route }) {
       dispatch(addToCartRequest(object, amount));
     });
 
-    Toast.showSuccess('Todos os produtos foram\n adicionados ao cesto');
+    Toast.showSuccess("Todos os produtos foram\n adicionados ao cesto");
   }
 
   const handleCancel = useCallback(async (transaction) => {
     try {
       const {
-        data: { meta: {
-          message
-        } },
+        data: {
+          meta: { message },
+        },
       } = await api.post(`clients/transactions/statuses/${transaction.id}`);
 
       Toast.show(message);
 
-      let newTransaction = {...transaction, status: 'Cancelado'};
+      let newTransaction = { ...transaction, status: "Cancelado" };
       setTransaction(newTransaction);
     } catch (err) {
       Toast.show(err);
@@ -81,8 +81,8 @@ export default function Details({ route }) {
           data: { data },
         } = await api.get(`clients/transactions/${id}`);
 
-        setShippingAddress(data.shipping_address);
-        delete data.shipping_address;
+        setShippingAddress(data.shippingAddress);
+        delete data.shippingAddress;
 
         setProducts(data.products);
 
@@ -93,7 +93,7 @@ export default function Details({ route }) {
       } catch (err) {
         setLoading(false);
 
-        Toast.show('Houve um erro ao carregar os dados da compra.');
+        Toast.show("Houve um erro ao carregar os dados da compra.");
       }
     }
     loadInfo();
@@ -103,8 +103,8 @@ export default function Details({ route }) {
     <>
       <Container
         contentContainerStyle={{
-          alignItems: 'center',
-          justifyContent: 'space-between',
+          alignItems: "center",
+          justifyContent: "space-between",
         }}
       >
         {loading ? (
@@ -136,7 +136,7 @@ export default function Details({ route }) {
                 <Price>
                   {transaction.shipping > 0
                     ? `€ ${transaction.shipping.toFixed(2)}`
-                    : 'Grátis'}
+                    : "Grátis"}
                 </Price>
               </Detail>
 
@@ -196,15 +196,16 @@ export default function Details({ route }) {
 
               <Separator />
 
-              <ShippingAddressContainer>
-                <Content>{`${shippingAddress.address} ${shippingAddress.district}`}</Content>
+              {!!shippingAddress && (
+                <ShippingAddressContainer>
+                  <Content>{`${shippingAddress.address} ${shippingAddress.district}`}</Content>
 
-                <Value
-                  numberOfLines={2}
-                >{`${shippingAddress.zipcode} ${shippingAddress.city} - ${shippingAddress.state}`}</Value>
-              </ShippingAddressContainer>
+                  <Value
+                    numberOfLines={2}
+                  >{`${shippingAddress.zipcode} ${shippingAddress.city} - ${shippingAddress.state}`}</Value>
+                </ShippingAddressContainer>
+              )}
             </Info>
-
             <ShippingDetailsContainer>
               <Detail>
                 <DetailField>Crédito Recebido</DetailField>
@@ -215,7 +216,9 @@ export default function Details({ route }) {
 
               <Detail>
                 <DetailField>Estado da encomenda</DetailField>
-                <DetailStatus status={false}>{transaction.status}</DetailStatus>
+                <DetailStatus status={false}>
+                  {transaction.status.name}
+                </DetailStatus>
               </Detail>
 
               <Detail>
@@ -235,15 +238,17 @@ export default function Details({ route }) {
                 </DetailStatus>
               </Detail>
 
-              {transaction.delivery !== null && (
+              {transaction.scheduledShipping !== null && (
                 <Detail>
                   <DetailField>Entrega agendada para</DetailField>
-                  <DetailStatus status>{transaction.delivery}</DetailStatus>
+                  <DetailStatus status>
+                    {transaction.scheduledShipping}
+                  </DetailStatus>
                 </Detail>
               )}
             </ShippingDetailsContainer>
 
-            {transaction.status !== 'Cancelado' && (
+            {transaction.status.name !== "Cancelado" && (
               <CancelButton onPress={() => handleCancel(transaction)}>
                 <CancelButtonText>Cancelar encomenda</CancelButtonText>
               </CancelButton>

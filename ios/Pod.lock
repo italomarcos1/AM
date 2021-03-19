@@ -1,6 +1,6 @@
 PODS:
   - boost-for-react-native (1.63.0)
-  - CocoaAsyncSocket (7.6.5)
+  - CocoaAsyncSocket (7.6.4)
   - CocoaLibEvent (1.0.0)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.63.4)
@@ -37,8 +37,8 @@ PODS:
     - OpenSSL-Universal (= 1.0.2.20)
   - Flipper-Glog (0.3.6)
   - Flipper-PeerTalk (0.0.4)
-  - Flipper-RSocket (1.1.1):
-    - Flipper-Folly (~> 2.3)
+  - Flipper-RSocket (1.1.0):
+    - Flipper-Folly (~> 2.2)
   - FlipperKit (0.54.0):
     - FlipperKit/Core (= 0.54.0)
   - FlipperKit/Core (0.54.0):
@@ -81,7 +81,7 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
-  - OneSignal (3.2.3)
+  - OneSignal (3.1.0)
   - OpenSSL-Universal (1.0.2.20):
     - OpenSSL-Universal/Static (= 1.0.2.20)
   - OpenSSL-Universal/Static (1.0.2.20)
@@ -265,12 +265,12 @@ PODS:
   - react-native-fbsdk/Share (1.1.2):
     - FBSDKShareKit (= 5.8)
     - React
-  - react-native-image-picker (3.2.1):
-    - React-Core
-  - react-native-onesignal (4.0.5):
+  - react-native-image-picker (3.1.1):
+    - React
+  - react-native-onesignal (4.0.3):
     - OneSignal (= 3.2.3)
     - React (< 1.0.0, >= 0.13.0)
-  - react-native-safe-area-context (3.2.0):
+  - react-native-safe-area-context (3.1.9):
     - React-Core
   - react-native-splash-screen (3.2.0):
     - React
@@ -342,15 +342,15 @@ PODS:
     - React-jsi (= 0.63.4)
   - RNAppleAuthentication (2.1.0):
     - React-Core
-  - RNCAsyncStorage (1.14.1):
+  - RNCAsyncStorage (1.13.4):
     - React-Core
   - RNCMaskedView (0.1.10):
     - React
-  - RNGestureHandler (1.10.3):
+  - RNGestureHandler (1.9.0):
     - React-Core
   - RNReanimated (1.13.2):
     - React-Core
-  - RNScreens (2.18.1):
+  - RNScreens (2.16.1):
     - React-Core
   - RNSVG (12.1.0):
     - React
@@ -366,7 +366,7 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Flipper (~> 0.54.0)
   - Flipper-DoubleConversion (= 1.1.7)
-  - Flipper-Folly (= 2.3.0)
+  - Flipper-Folly (~> 2.2)
   - Flipper-Glog (= 0.3.6)
   - Flipper-PeerTalk (~> 0.0.4)
   - Flipper-RSocket (~> 1.1)
@@ -532,7 +532,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
-  CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
+  CocoaAsyncSocket: 694058e7c0ed05a9e217d1b3c7ded962f4180845
   CocoaLibEvent: 2fab71b8bd46dd33ddb959f7928ec5909f838e3f
   DoubleConversion: cde416483dac037923206447da6e1454df403714
   FBLazyVector: 3bb422f41b18121b71783a905c10e58606f7dc3e
@@ -545,11 +545,11 @@ SPEC CHECKSUMS:
   Flipper-Folly: e4493b013c02d9347d5e0cb4d128680239f6c78a
   Flipper-Glog: 1dfd6abf1e922806c52ceb8701a3599a79a200a6
   Flipper-PeerTalk: 116d8f857dc6ef55c7a5a75ea3ceaafe878aadc9
-  Flipper-RSocket: a3acb8812d6adf127deb0a5edae2793b97e6b641
+  Flipper-RSocket: 64e7431a55835eb953b0bf984ef3b90ae9fdddd7
   FlipperKit: ab353d41aea8aae2ea6daaf813e67496642f3d7d
   Folly: b73c3869541e86821df3c387eb0af5f65addfab4
   glog: 40a13f7840415b9a77023fbcae0f1e6f43192af3
-  OneSignal: 6f152411fc436071461af3514b58731fd8e38b9f
+  OneSignal: a5853b3c7f7bce791353a15db019b5ccd5b8585b
   OpenSSL-Universal: ff34003318d5e1163e9529b08470708e389ffcdd
   RCTRequired: 082f10cd3f905d6c124597fd1c14f6f2655ff65e
   RCTTypeSafety: 8c9c544ecbf20337d069e4ae7fd9a377aadf504b
@@ -562,9 +562,9 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 93bd528844ad21dc07aab1c67cb10abae6df6949
   React-jsinspector: 58aef7155bc9a9683f5b60b35eccea8722a4f53a
   react-native-fbsdk: c35d42169e64aaf66f01713c1e18d0674f7f6519
-  react-native-image-picker: 64d12e81f3d9dad0af107fe6536b295d51932ec0
-  react-native-onesignal: e071e143c92345aaccddaa7d9f49ef22952994e8
-  react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
+  react-native-image-picker: 9ea17b8cae5be829609f66d08b6fcc5dce329b76
+  react-native-onesignal: a69eeb12486e7739ed8f180e6ddd915be77721ba
+  react-native-safe-area-context: b6e0e284002381d2ff29fa4fff42b4d8282e3c94
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-uuid-generator: 82ffa2a1cac94242ebed52c4dedc5044d3412717
   react-native-version-check: d8b8900e6ce03ae1568cb22ef9451f2508188883
@@ -580,16 +580,16 @@ SPEC CHECKSUMS:
   React-RCTVibration: ae4f914cfe8de7d4de95ae1ea6cc8f6315d73d9d
   ReactCommon: 73d79c7039f473b76db6ff7c6b159c478acbbb3b
   RNAppleAuthentication: 46cbc67739bae83ca229497f9b0038f3f5431443
-  RNCAsyncStorage: fe58eec522885718d6b297b7b658bf87d7ca557b
+  RNCAsyncStorage: 44539979e1f234262d64d3ce86ec21cceb1b2c5e
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
-  RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
+  RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
   RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
-  RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
+  RNScreens: 45c457af3d2ee9e08fc01e70da87e653d46b1198
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   RNVectorIcons: bc69e6a278b14842063605de32bec61f0b251a59
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 9f8bd585e506615cf4fd7956feead59d371b70aa
+PODFILE CHECKSUM: 0318fecf3b6ee7f3d99058cf422d7e23cb1ed25b
 
 COCOAPODS: 1.10.0
