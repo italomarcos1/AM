@@ -1,0 +1,192 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "image": "https://amfrutas.pt/uploads/product_commerce/products/245/image/thumbs/img-1498-e9769e.jpg",
+      "name": "Azeite A.M.Frutas 5L",
+      "price": "24.99",
+      "amount": 2,
+      "rate": "4.8",
+      "isFavorite": false,
+      "comments": 4
+    },
+    {
+      "id": 2,
+      "image": "https://amfrutas.pt/uploads/product_commerce/products/214/image/thumbs/m-5-acb94a.jpg",
+      "name": "Água Monchique 5L",
+      "price": "1.49",
+      "amount": 5,
+      "rate": "5",
+      "isFavorite": false,
+      "comments": "12"
+    },
+    {
+      "id": 3,
+      "image": "https://amfrutas.pt/uploads/product_commerce/products/178/image/thumbs/greloscouve-0f916f.jpg",
+      "name": "Grelos Couve Molho 700G",
+      "price": "1.50",
+      "amount": 10,
+      "rate": "4.1",
+      "isFavorite": false,
+      "comments": "5"
+    },
+    {
+      "id": 4,
+      "image": "https://amfrutas.pt/uploads/product_commerce/products/172/image/thumbs/picasso-listagem-b345ed.png",
+      "name": "Batata Olho de Perdiz",
+      "price": "0.79",
+      "amount": 3,
+      "rate": "4.2",
+      "isFavorite": false,
+      "comments": "6"
+    },
+    {
+      "id": 5,
+      "image": "https://amfrutas.pt/uploads/product_commerce/products/147/image/thumbs/uva-dbe0e0.jpg",
+      "name": "Uva Red Globe Kg",
+      "price": "2.99",
+      "amount": 4,
+      "rate": "4.8",
+      "isFavorite": false,
+      "comments": "9"
+    },
+    {
+      "id": 6,
+      "image": "https://amfrutas.pt/uploads/product_commerce/products/145/image/thumbs/coco-b9c514.jpg",
+      "name": "Côco Unidade",
+      "price": "1.0",
+      "amount": 2,
+      "rate": "4.6",
+      "isFavorite": false,
+      "comments": "3"
+    },
+    {
+      "id": 7,
+      "image": "https://amfrutas.pt/uploads/product_commerce/products/142/image/thumbs/grelo-de-nabo-bomercado-bcc2dd.jpg",
+      "name": "Grelos de Nabo 800G",
+      "price": "1.50",
+      "amount": 5,
+      "rate": "4.7",
+      "isFavorite": false,
+      "comments": "22"
+    },
+    {
+      "id": 8,
+      "image": "https://amfrutas.pt/uploads/product_commerce/products/137/image/thumbs/melao-4c8d8c.jpg",
+      "name": "Melão Verde Unidade",
+      "price": "4.17",
+      "amount": 9,
+      "rate": "4.3",
+      "isFavorite": false,
+      "comments": "17"
+    }
+  ],
+  "tips": [
+    {
+      "id": 1,
+      "image": "https://amfrutas.pt/uploads/content_manager/contents/47/image/thumbs/os-beneficios-da-clementina.jpg",
+      "description": "OS BENEFICIOS DA CLEMENTINA"
+    },
+    {
+      "id": 2,
+      "image": "https://amfrutas.pt/uploads/content_manager/contents/45/image/thumbs/sumos-detox-faca-voce-mesmo.jpg",
+      "description": "SUMOS DETOX | FAÇA VOCÊ MESMO"
+    },
+    {
+      "id": 3,
+      "image": "https://amfrutas.pt/uploads/content_manager/contents/44/image/thumbs/dieta-do-limao-perca-peso-ja.jpg",
+      "description": "DIETA DO LIMÃO, PERCA PESO JÁ"
+    },
+    {
+      "id": 4,
+      "image": "https://amfrutas.pt/uploads/content_manager/contents/41/image/thumbs/receitas-de-pratos-vegan-deliciosas.jpg",
+      "description": "RECEITAS DE PRATOS VEGAN DELICIOSAS"
+    },
+    {
+      "id": 5,
+      "image": "https://amfrutas.pt/uploads/content_manager/contents/40/image/thumbs/como-conservar-as-frutas-por-mais-tempo.jpeg",
+      "description": "COMO CONSERVAR AS FRUTAS POR MAIS TEMPO"
+    },
+    {
+      "id": 6,
+      "image": "https://amfrutas.pt/uploads/product_commerce/products/243/image/thumbs/amendoa-com-pele-bdc59e.jpg",
+      "description": "AS RECEITAS DOS MELHORES COCKTAILS DE FRUTA"
+    }
+  ],
+  "deliveries": [
+    {
+      "id": 1,
+      "image": "https://amfrutas.pt/uploads/content_manager/contents/50/image/thumbs/ssrvico-take-away.jpeg",
+      "description": "Serviço Take-away"
+    },
+    {
+      "id": 2,
+      "image": "https://amfrutas.pt/uploads/content_manager/contents/49/image/thumbs/entregas-de-frutas-e-legumes-a-casa-na-linha-de-cascais.jpeg",
+      "description": "Entrega de frutas e legumes a casa"
+    },
+    {
+      "id": 3,
+      "image": "https://amfrutas.pt/uploads/content_manager/contents/43/image/thumbs/fornecimento-de-frutas-na-linha-de-cascais.jpg",
+      "description": "Fornecimento a empresas na linha de cascais"
+    },
+    {
+      "id": 4,
+      "image": "https://amfrutas.pt/uploads/content_manager/contents/39/image/thumbs/fornecimento-a-empresas-em-lisboa.jpeg",
+      "description": "Fornecimento a empresas em Lisboa"
+    },
+
+    {
+      "id": 5,
+      "image": "https://amfrutas.pt/uploads/content_manager/contents/27/image/thumbs/como-e-que-as-nossas-entregas-se-diferenciam.jpg",
+      "description": "Como é que as nossas entregas se diferenciam?"
+    },
+    {
+      "id": 6,
+      "image": "https://amfrutas.pt/uploads/content_manager/contents/13/image/thumbs/porque-ter-um-fornecedor-de-frutas-e-legumes.jpg",
+      "description": "Porquê ter um fornecedor de frutas e legumes?"
+    }
+  ],
+  "promotions": [
+    {
+      "id": 1,
+      "image": "https://amfrutas.pt/uploads/product_commerce/products/362/image/thumbs/britada-afa0d0.jpg",
+      "description": "Azeitonas e Tremoços"
+    },
+    {
+      "id": 2,
+      "image": "https://amfrutas.pt/uploads/product_commerce/products/352/image/thumbs/e7e62cc8-cf5c-4e4a-ad98-296836c56f0b-cc8f27.jpeg",
+      "description": "Cabazes"
+    },
+    {
+      "id": 3,
+      "image": "https://amfrutas.pt/uploads/product_commerce/products/310/image/thumbs/496910a1-6b6a-46bc-a51c-3ffa058f8ff4-611674.jpeg",
+      "aspectRatio": 0.834,
+      "description": "Cogumelos"
+    },
+    {
+      "id": 4,
+      "image": "https://amfrutas.pt/uploads/product_commerce/products/74/image/thumbs/oleo-essencial-alecrim-4-997afd.jpg",
+      "description": "Ervas Aromáticas"
+    },
+    {
+      "id": 5,
+      "image": "https://amfrutas.pt/uploads/product_commerce/products/130/image/thumbs/media-1-2bc1be.jpg",
+      "description": "Frutas"
+    },
+    {
+      "id": 6,
+      "image": "https://amfrutas.pt/uploads/product_commerce/products/243/image/thumbs/amendoa-com-pele-bdc59e.jpg",
+      "description": "Frutos Secos e Sementes"
+    },
+    {
+      "id": 7,
+      "image": "https://amfrutas.pt/uploads/product_commerce/products/628/image/thumbs/rabanete-4745cf-29a6c5.jpg",
+      "description": "Horticolas"
+    },
+    {
+      "id": 8,
+      "image": "https://amfrutas.pt/uploads/product_commerce/products/264/image/thumbs/feijao-catarino-77c557.jpg",
+      "description": "Leguminosas"
+    }
+  ]
+}

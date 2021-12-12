@@ -1,0 +1,17 @@
+rootProject.name = 'AM'
+include ':react-native-appstore-version-checker'
+project(':react-native-appstore-version-checker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-appstore-version-checker/android')
+include ':react-native-appstore-version-checker'
+project(':react-native-appstore-version-checker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-appstore-version-checker/android')
+include ':react-native-appstore-version-checker'
+project(':react-native-appstore-version-checker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-appstore-version-checker/android')
+include ':react-native-appstore-version-checker'
+project(':react-native-appstore-version-checker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-appstore-version-checker/android')
+
+include ':react-native-version-check'
+project(':react-native-version-check').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-version-check/android')
+apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
+include ':app'
+
+include ':react-native-appstore-version-checker'
+project(':react-native-appstore-version-checker').projectDir = new File(rootProject.projectDir,     '../node_modules/react-native-appstore-version-checker/android')
