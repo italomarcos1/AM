@@ -33,7 +33,7 @@ function Index() {
               },
             },
           ],
-          { cancelable: true },
+          { cancelable: false },
         );
       }
     } catch (error) {
