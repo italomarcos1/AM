@@ -1,19 +1,19 @@
-import "./config/ReactotronConfig";
-import React, { useCallback, useEffect } from "react";
-import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
-import { NavigationContainer } from "@react-navigation/native";
-import OneSignal from "react-native-onesignal";
+import './config/ReactotronConfig';
+import React, { useCallback, useEffect } from 'react';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { NavigationContainer } from '@react-navigation/native';
+import OneSignal from 'react-native-onesignal';
 
-import { Alert, StatusBar, BackHandler, Linking } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import UUIDGenerator from "react-native-uuid-generator";
-import Toast from "react-native-tiny-toast";
-import VersionCheck from "react-native-version-check";
-import { getAppstoreAppMetadata } from "react-native-appstore-version-checker";
-import Routes from "./routes";
+import { Alert, StatusBar, BackHandler, Linking } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import UUIDGenerator from 'react-native-uuid-generator';
+import Toast from 'react-native-tiny-toast';
+import VersionCheck from 'react-native-version-check';
+import { getAppstoreAppMetadata } from 'react-native-appstore-version-checker';
+import Routes from './routes';
 
-import { store, persistor } from "./store";
+import { store, persistor } from './store';
 
 function Index() {
   const checkVersion = async () => {
@@ -22,18 +22,18 @@ function Index() {
 
       if (updateNeed && updateNeed.isNeeded) {
         Alert.alert(
-          "Por favor atualize",
-          "Você precisa atualizar o aplicativo para a última versão para continuar comprando.",
+          'Por favor atualize',
+          'Você precisa atualizar o aplicativo para a última versão para continuar comprando.',
           [
             {
-              text: "Atualizar",
+              text: 'Atualizar',
               onPress: () => {
                 BackHandler.exitApp();
                 Linking.openURL(updateNeed.storeUrl);
               },
             },
           ],
-          { cancelable: false }
+          { cancelable: true },
         );
       }
     } catch (error) {
@@ -43,23 +43,23 @@ function Index() {
 
   const generateAndStoreUuid = async () => {
     try {
-      const uuid = await AsyncStorage.getItem("@uuid");
+      const uuid = await AsyncStorage.getItem('@uuid');
 
       if (uuid === null) {
         UUIDGenerator.getRandomUUID(async (uuid) => {
-          await AsyncStorage.setItem("@uuid", uuid);
+          await AsyncStorage.setItem('@uuid', uuid);
         });
       }
     } catch (error) {
       UUIDGenerator.getRandomUUID(async (uuid) => {
-        await AsyncStorage.setItem("@uuid", uuid);
+        await AsyncStorage.setItem('@uuid', uuid);
       });
     }
   };
 
   const onReceived = useCallback(
     (notification) => console.log(notification),
-    []
+    [],
   );
 
   const onOpened = useCallback((openResult) => console.log(openResult), []);
@@ -70,11 +70,11 @@ function Index() {
     checkVersion();
 
     async function oneSignalCheck() {
-      OneSignal.setAppId("e6c7df22-1200-4ab7-bfff-8001bf13a921");
+      OneSignal.setAppId('e6c7df22-1200-4ab7-bfff-8001bf13a921');
 
       const deviceState = await OneSignal.getDeviceState();
       if (deviceState.isSubscribed == false) {
-        OneSignal.addTrigger("prompt_ios", "true");
+        OneSignal.addTrigger('prompt_ios', 'true');
       }
     }
 
@@ -95,13 +95,13 @@ function Index() {
 
   const config = {
     screens: {
-      Home: "home",
+      Home: 'home',
     },
   };
 
   const linking = {
     enabled: true,
-    prefixes: ["amfrutas://", "amfrutas://app", "https://amfrutas.pt"],
+    prefixes: ['amfrutas://', 'amfrutas://app', 'https://amfrutas.pt'],
     config,
   };
 

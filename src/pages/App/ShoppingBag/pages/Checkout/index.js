@@ -416,7 +416,7 @@ export default function Checkout() {
       });
     } catch (err) {
       Toast.hide();
-      Toast.show(err);
+      Toast.show(err.response.data.meta.message); // texto
     }
   }, [
     additionalInformation,
@@ -475,8 +475,6 @@ export default function Checkout() {
   const loadShippingMethods = useCallback(async () => {
     try {
       setLoading(true);
-      console.log('ccccc');
-      console.log('ccccc', subtotal);
 
       const { data } = await api.get(
         `checkout/shipping-methods?subtotal=${subtotal}`,
